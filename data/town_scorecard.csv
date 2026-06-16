@@ -1,0 +1,28 @@
+town,geography_level,total_business_count,businesses_per_sq_mi,recreation_assets_nearby,recreation_asset_names,outfitters_in_town,pws_total_count,pws_tncws_count,pws_small_systems_under_100pop,municipal_pop_per_connection,has_municipal_cws,on_karst,dist_to_karst_mi,opportunity_score,pressure_score
+Marlinton,incorporated_place,167,71.06,4,Watoga State Park; Beartown State Park; Droop Mountain Battlefield SP; Greenbrier River Trail (direct connection),2,44,41,37,2.27,True,False,0.05,13,2
+Davis,incorporated_place,34,16.94,2,Blackwater Falls State Park; Canaan Valley Resort State Park,2,20,14,11,2.07,True,False,1.7,7,2
+Bruceton Mills,incorporated_place,20,360.67,2,"Cooper's Rock State Forest (near, unmapped); Chestnut Ridge Park (near, unmapped)",0,17,14,10,4.02,True,False,5.7,7,2
+White Sulphur Springs,incorporated_place,184,98.22,1,"Greenbrier Resort (self-supplied, not public rec)",0,11,9,6,2.06,True,True,0.0,5,4
+Cass,census_designated_place,10,13.88,2,Cass Scenic Railroad State Park; Greenbrier River Trail (terminus),0,5,4,4,,False,False,0.45,5,4
+Parsons,incorporated_place,101,89.98,1,Monongahela NF - Otter Creek/Spruce Knob area (near),0,15,13,10,1.83,True,False,1.59,5,2
+Durbin,incorporated_place,21,35.02,1,Monongahela NF (Cheat Mountain area),0,8,6,6,2.01,True,False,0.79,4,2
+Hillsboro,incorporated_place,14,26.28,1,Droop Mountain Battlefield State Park,0,8,5,6,,False,True,0.0,3,6
+Kingwood,incorporated_place,199,81.89,0,none mapped,0,7,4,4,2.36,True,False,2.65,3,2
+Terra Alta,incorporated_place,75,63.28,0,none mapped,0,7,5,5,2.42,True,False,0.55,3,2
+Albright,incorporated_place,20,86.22,0,none mapped,0,4,2,3,2.17,True,False,1.73,3,2
+Masontown,incorporated_place,27,97.09,0,none mapped,0,1,0,0,2.38,True,False,1.87,3,0
+Aurora,census_designated_place,17,8.07,1,Cathedral State Park,0,9,8,8,,False,True,0.0,2,6
+Hambleton,incorporated_place,8,36.05,0,none mapped,0,0,0,0,,False,False,0.38,2,3
+Green Bank,census_designated_place,24,7.27,1,Green Bank Observatory,0,2,1,1,,False,False,0.93,2,2
+Arbovale,census_designated_place,8,13.73,0,none mapped,0,4,4,4,,False,False,2.25,1,5
+Bartow,census_designated_place,5,10.77,0,none mapped,0,8,7,7,,False,False,2.76,1,5
+Cheat Lake,census_designated_place,243,16.95,0,none mapped,0,0,0,0,,False,True,0.0,1,4
+Brookhaven,census_designated_place,121,13.09,0,none mapped,0,0,0,0,,False,True,0.0,1,4
+Harman,incorporated_place,9,27.84,0,none mapped,0,2,1,1,2.29,True,True,0.0,1,3
+Rowlesburg,incorporated_place,28,27.71,0,none mapped,0,7,6,6,2.37,True,False,0.32,1,2
+Hendricks,incorporated_place,5,15.9,0,none mapped,0,1,0,0,2.28,True,False,0.12,1,1
+Thomas,incorporated_place,60,17.2,0,none mapped,0,1,0,0,2.01,True,False,2.31,1,0
+Huntersville,census_designated_place,4,3.54,0,none mapped,0,0,0,0,,False,True,0.0,0,5
+Brandonville,incorporated_place,2,5.19,0,none mapped,0,0,0,0,,False,False,5.71,0,3
+Frank,census_designated_place,2,5.24,0,none mapped,0,0,0,0,,False,False,1.61,0,3
+St. George,census_designated_place,2,1.89,0,none mapped,0,0,0,0,,False,False,2.36,0,3
