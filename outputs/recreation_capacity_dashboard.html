@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALT Corridor — Recreation Capacity Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -22,18 +21,101 @@
               letter-spacing: .04em; }
 
   /* ── Layout ── */
-  .top-panels { display: grid; grid-template-columns: 1fr 340px; gap: 16px;
-                 padding: 16px 16px 0; }
+  .top-panels { display: grid; grid-template-columns: 1fr 320px; gap: 16px;
+                 padding: 16px 16px 0; align-items: start; }
   section.panel { background: #fff; border-radius: 8px; padding: 16px;
                    box-shadow: 0 1px 4px rgba(0,0,0,.08); }
   h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .07em;
         color: #555; border-bottom: 1px solid #e8e8e5; padding-bottom: 8px;
         margin-bottom: 12px; }
 
-  /* ── Scatter ── */
-  #scatter-wrap { position: relative; height: 380px; }
+  /* ── Quadrant grid ── */
+  .grid-wrap {
+    display: grid;
+    grid-template-columns: 22px 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    width: 100%;
+  }
+  .ax-corner { grid-column:1; grid-row:1; }
+  .ax-top { grid-column:2/4; grid-row:1; display:flex; gap:0; }
+  .ax-top-cell {
+    flex:1; text-align:center;
+    font-size:.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.05em; padding:3px 0; border-radius:4px; }
+  .ax-top-cell.high { color:#2d8a4e; background:#edf7f1; }
+  .ax-top-cell.low  { color:#888;    background:#f0f0ee; margin-left:8px; }
+  .ax-left { grid-column:1; grid-row:2/4;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:space-around; }
+  .ax-left-label {
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-size:.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.05em; white-space:nowrap; }
+  .ax-left-label.low  { color:#2d8a4e; }
+  .ax-left-label.high { color:#c62828; }
 
-  /* ── Findings ── */
+  .quad {
+    border-radius:8px; padding:12px 14px; min-height:140px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .quad-header { display:flex; flex-direction:column; gap:2px;
+    margin-bottom:8px; padding-bottom:7px; border-bottom:2px solid; }
+  .quad-title { font-size:.72rem; font-weight:700;
+                text-transform:uppercase; letter-spacing:.06em; }
+  .quad-sub   { font-size:.63rem; color:#777; }
+
+  .quad.green  { background:#f0f9f4; }
+  .quad.gray   { background:#fafaf8; }
+  .quad.orange { background:#fff8ee; }
+  .quad.red    { background:#fff2f2; }
+  .quad.green  .quad-header { border-color:#2d8a4e; }
+  .quad.gray   .quad-header { border-color:#aaa; }
+  .quad.orange .quad-header { border-color:#d4850a; }
+  .quad.red    .quad-header { border-color:#c62828; }
+  .quad.green  .quad-title { color:#2d8a4e; }
+  .quad.gray   .quad-title { color:#888; }
+  .quad.orange .quad-title { color:#d4850a; }
+  .quad.red    .quad-title { color:#c62828; }
+
+  /* Town chips */
+  .town-list { display:flex; flex-wrap:wrap; gap:5px; }
+  .chip {
+    display:inline-flex; align-items:center; gap:4px;
+    border-radius:4px; padding:4px 8px; cursor:default;
+    font-size:.72rem; border:1px solid transparent;
+    transition:transform .1s, box-shadow .1s;
+    position:relative;
+  }
+  .chip:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(0,0,0,.14); z-index:10; }
+  .chip:hover .chip-tip { display:block; }
+  .quad.green  .chip { background:#d4f0e0; border-color:#a8ddc0; color:#1a5c35; }
+  .quad.gray   .chip { background:#e8e8e6; border-color:#ccc;    color:#444;    }
+  .quad.orange .chip { background:#fde8c0; border-color:#f5c878; color:#7a4800; }
+  .quad.red    .chip { background:#fdd8d8; border-color:#f5a8a8; color:#7a1515; }
+  .chip .scores { font-size:.63rem; opacity:.6; }
+
+  /* Tooltip */
+  .chip-tip {
+    display:none; position:absolute; bottom:calc(100% + 6px); left:50%;
+    transform:translateX(-50%); background:#1a3a2a; color:#fff;
+    padding:9px 12px; border-radius:6px; font-size:.71rem;
+    white-space:nowrap; z-index:20; pointer-events:none;
+    line-height:1.65; min-width:210px;
+    box-shadow:0 3px 12px rgba(0,0,0,.3);
+  }
+  .chip-tip::after {
+    content:""; position:absolute; top:100%; left:50%;
+    transform:translateX(-50%); border:5px solid transparent;
+    border-top-color:#1a3a2a;
+  }
+  .tip-row  { display:flex; justify-content:space-between; gap:14px; }
+  .tip-label{ color:#7dd9a0; }
+  .tip-flag { color:#f9b4b4; margin-top:2px; }
+  .tip-assets{ color:#adc; font-size:.67rem; margin-top:3px;
+               white-space:normal; max-width:260px; line-height:1.4; }
+
+  /* ── Findings sidebar ── */
   .quad-card { border-left: 4px solid; border-radius: 0 6px 6px 0;
                 padding: 9px 11px; margin-bottom: 10px; }
   .quad-card.green  { border-color: #2d8a4e; background: #f0f9f4; }
@@ -119,10 +201,52 @@
 </header>
 
 <div class="top-panels">
-  <!-- Scatter plot -->
+  <!-- Quadrant grid -->
   <section class="panel">
     <h2>Opportunity vs. Pressure — 27 Corridor Towns</h2>
-    <div id="scatter-wrap"><canvas id="scatterChart"></canvas></div>
+    <div class="grid-wrap">
+      <div class="ax-corner"></div>
+      <div class="ax-top">
+        <div class="ax-top-cell high">▲ Higher opportunity</div>
+        <div class="ax-top-cell low">Lower opportunity</div>
+      </div>
+      <div class="ax-left">
+        <div class="ax-left-label low">Lower pressure ↑</div>
+        <div class="ax-left-label high">↓ Higher pressure</div>
+      </div>
+      <!-- TOP-LEFT: High opp / Low press -->
+      <div class="quad green" style="grid-column:2;grid-row:2">
+        <div class="quad-header">
+          <span class="quad-title">Positioned to Capture</span>
+          <span class="quad-sub">Strong assets · stable infrastructure</span>
+        </div>
+        <div class="town-list" id="q-green"></div>
+      </div>
+      <!-- TOP-RIGHT: Low opp / Low press -->
+      <div class="quad gray" style="grid-column:3;grid-row:2">
+        <div class="quad-header">
+          <span class="quad-title">Stable Baseline</span>
+          <span class="quad-sub">Lower trail exposure · solid infrastructure</span>
+        </div>
+        <div class="town-list" id="q-gray"></div>
+      </div>
+      <!-- BOTTOM-LEFT: High opp / High press -->
+      <div class="quad orange" style="grid-column:2;grid-row:3">
+        <div class="quad-header">
+          <span class="quad-title">Invest Before Scaling</span>
+          <span class="quad-sub">Real draw · infrastructure needs attention</span>
+        </div>
+        <div class="town-list" id="q-orange"></div>
+      </div>
+      <!-- BOTTOM-RIGHT: Low opp / High press -->
+      <div class="quad red" style="grid-column:3;grid-row:3">
+        <div class="quad-header">
+          <span class="quad-title">Infrastructure First</span>
+          <span class="quad-sub">Capacity investment needed before growth</span>
+        </div>
+        <div class="town-list" id="q-red"></div>
+      </div>
+    </div>
   </section>
 
   <!-- Quadrant findings -->
@@ -130,27 +254,27 @@
     <h2>Quadrant Summary</h2>
 
     <div class="quad-card green">
-      <div class="label">High opportunity · Low pressure</div>
+      <div class="label">Positioned to Capture</div>
       <div class="towns">Marlinton · Davis · Parsons · Durbin · Bruceton Mills · Albright</div>
       <div class="note">Strongest existing commercial and infrastructure base. Front-of-house towns for the corridor. Marlinton is the standout: 5 mapped assets, 2 outfitters, municipal water.</div>
     </div>
 
     <div class="quad-card orange">
-      <div class="label">High opportunity · High pressure</div>
+      <div class="label">Invest Before Scaling</div>
       <div class="towns">Cass · White Sulphur Springs · Hambleton</div>
-      <div class="note">Real recreation draws but thin or fragile infrastructure. Cass has no municipal water. White Sulphur Springs sits on karst. These require care before scaling tourism.</div>
+      <div class="note">Real recreation draws but thin or fragile infrastructure. Cass has no municipal water. White Sulphur Springs sits on karst. Infrastructure investment should precede tourism scaling.</div>
     </div>
 
     <div class="quad-card red">
-      <div class="label">Low opportunity · High pressure</div>
+      <div class="label">Infrastructure First</div>
       <div class="towns">Hillsboro · Aurora · Arbovale · Bartow · Huntersville · Harman</div>
-      <div class="note">Most exposed, least to gain. Hillsboro and Aurora score 6 on pressure — both on karst, no municipal CWS, yet Droop Mountain and Cathedral SP pull visitor traffic.</div>
+      <div class="note">Hillsboro and Aurora score 6 on pressure — both on karst, no municipal CWS, yet Droop Mountain and Cathedral SP pull visitor traffic. Foundational capacity investment is the priority.</div>
     </div>
 
     <div class="quad-card gray">
-      <div class="label">Low opportunity · Low pressure</div>
+      <div class="label">Stable Baseline</div>
       <div class="towns">Kingwood · Terra Alta · Rowlesburg · Thomas · Masontown · Green Bank · others</div>
-      <div class="note">Stable but largely outside trail-driven tourism scope. Municipal water, moderate business base, off karst.</div>
+      <div class="note">Stable but largely outside trail-driven tourism scope. Municipal water, moderate business base, off karst. Lower trail exposure overall.</div>
     </div>
   </section>
 </div>
@@ -161,11 +285,11 @@
     <h2>Town Scorecard</h2>
     <div class="filter-bar">
       <span>Filter:</span>
-      <button class="qbtn all active"   data-q="all"   onclick="filterQuad(this)">All towns</button>
-      <button class="qbtn green"  data-q="green"  onclick="filterQuad(this)">High opp / Low press</button>
-      <button class="qbtn orange" data-q="orange" onclick="filterQuad(this)">High opp / High press</button>
-      <button class="qbtn red"    data-q="red"    onclick="filterQuad(this)">Low opp / High press</button>
-      <button class="qbtn gray"   data-q="gray"   onclick="filterQuad(this)">Low opp / Low press</button>
+      <button class="qbtn all active"   data-q="all"    onclick="filterQuad(this)">All towns</button>
+      <button class="qbtn green"  data-q="green"  onclick="filterQuad(this)">Positioned to Capture</button>
+      <button class="qbtn orange" data-q="orange" onclick="filterQuad(this)">Invest Before Scaling</button>
+      <button class="qbtn red"    data-q="red"    onclick="filterQuad(this)">Infrastructure First</button>
+      <button class="qbtn gray"   data-q="gray"   onclick="filterQuad(this)">Stable Baseline</button>
     </div>
   </section>
   <table id="scorecard-table">
@@ -195,221 +319,54 @@
   Data sources: WV DNR · WV Division of Forestry · USFS Monongahela NF · USFWS · EPA SDWIS ·
   WVGES 1968 karst layer (via DOE EDX) · US Census TIGER · field-curated outfitter data.
   Scores are relative rankings within this corridor, not validated external indices.
+  Population figures: approximate 2020 Census / ACS 5-year estimates.
 </footer>
 
 <script>
 const OPP_THRESH  = 5;
 const PRESS_THRESH = 3;
 
-const towns = [{"town": "Marlinton", "opportunity_score": 15, "pressure_score": 2, "recreation_assets_nearby": 5, "recreation_asset_names": "Watoga State Park; Beartown State Park; Droop Mountain Battlefield State Park; Greenbrier River Trail (direct connection); Seneca State Forest", "outfitters_in_town": 2, "total_business_count": 167, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.05, "pws_small_systems_under_100pop": 37, "municipal_pop_per_connection": 2.27}, {"town": "Davis", "opportunity_score": 11, "pressure_score": 2, "recreation_assets_nearby": 4, "recreation_asset_names": "Blackwater Falls State Park; Canaan Valley Resort State Park; Canaan Valley National Wildlife Refuge; Dolly Sods Wilderness", "outfitters_in_town": 2, "total_business_count": 34, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.7, "pws_small_systems_under_100pop": 11, "municipal_pop_per_connection": 2.07}, {"town": "Parsons", "opportunity_score": 9, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Otter Creek Wilderness; Laurel Fork North Wilderness; Spruce Knob-Seneca Rocks NRA", "outfitters_in_town": 0, "total_business_count": 101, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.59, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 1.83}, {"town": "Durbin", "opportunity_score": 8, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area); Laurel Fork North Wilderness; Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 21, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.79, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.01}, {"town": "White Sulphur Springs", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 2, "recreation_asset_names": "The Greenbrier Resort (private, self-supplied); Greenbrier State Forest", "outfitters_in_town": 0, "total_business_count": 184, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.06}, {"town": "Cass", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 3, "recreation_asset_names": "Cass Scenic Railroad State Park; Greenbrier River Trail (terminus); Snowshoe Mountain Resort (private)", "outfitters_in_town": 0, "total_business_count": 10, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.45, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": NaN}, {"town": "Bruceton Mills", "opportunity_score": 7, "pressure_score": 2, "recreation_assets_nearby": 2, "recreation_asset_names": "Coopers Rock State Forest; Chestnut Ridge Regional Park (county, ~6mi)", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 5.7, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 4.02}, {"town": "Albright", "opportunity_score": 5, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.73, "pws_small_systems_under_100pop": 3, "municipal_pop_per_connection": 2.17}, {"town": "Hambleton", "opportunity_score": 4, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Otter Creek Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.38, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "Hillsboro", "opportunity_score": 3, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Droop Mountain Battlefield State Park", "outfitters_in_town": 0, "total_business_count": 14, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": NaN}, {"town": "Arbovale", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Cranberry Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.25, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": NaN}, {"town": "Bartow", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.76, "pws_small_systems_under_100pop": 7, "municipal_pop_per_connection": NaN}, {"town": "Harman", "opportunity_score": 3, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Dolly Sods Wilderness", "outfitters_in_town": 0, "total_business_count": 9, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": 2.29}, {"town": "Kingwood", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 199, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.65, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": 2.36}, {"town": "Terra Alta", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 75, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.55, "pws_small_systems_under_100pop": 5, "municipal_pop_per_connection": 2.42}, {"town": "Rowlesburg", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 28, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.32, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.37}, {"town": "Thomas", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 1, "recreation_asset_names": "Canaan Valley National Wildlife Refuge", "outfitters_in_town": 0, "total_business_count": 60, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.31, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.01}, {"town": "Masontown", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 27, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.87, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.38}, {"town": "Aurora", "opportunity_score": 2, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Cathedral State Park", "outfitters_in_town": 0, "total_business_count": 17, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 8, "municipal_pop_per_connection": NaN}, {"town": "Green Bank", "opportunity_score": 2, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Green Bank Observatory", "outfitters_in_town": 0, "total_business_count": 24, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.93, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": NaN}, {"town": "Cheat Lake", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 243, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "Brookhaven", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 121, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "Hendricks", "opportunity_score": 1, "pressure_score": 1, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.12, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.28}, {"town": "Huntersville", "opportunity_score": 0, "pressure_score": 5, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 4, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "Brandonville", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 5.71, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "Frank", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 1.61, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}, {"town": "St. George", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.36, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": NaN}];
+// 2020 Census population (approximate)
+const POP = {
+  "Marlinton":931, "Davis":606, "Parsons":1315, "Durbin":217,
+  "White Sulphur Springs":2199, "Cass":60, "Bruceton Mills":518,
+  "Albright":179, "Hambleton":298, "Hillsboro":175, "Arbovale":90,
+  "Bartow":85, "Harman":350, "Kingwood":2761, "Terra Alta":1329,
+  "Rowlesburg":494, "Thomas":572, "Masontown":533, "Aurora":209,
+  "Green Bank":130, "Cheat Lake":9210, "Brookhaven":4312,
+  "Hendricks":238, "Huntersville":25, "Brandonville":75,
+  "Frank":15, "St. George":401
+};
+
+const towns = [{"town": "Marlinton", "opportunity_score": 15, "pressure_score": 2, "recreation_assets_nearby": 5, "recreation_asset_names": "Watoga State Park; Beartown State Park; Droop Mountain Battlefield State Park; Greenbrier River Trail (direct connection); Seneca State Forest", "outfitters_in_town": 2, "total_business_count": 167, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.05, "pws_small_systems_under_100pop": 37, "municipal_pop_per_connection": 2.27}, {"town": "Davis", "opportunity_score": 11, "pressure_score": 2, "recreation_assets_nearby": 4, "recreation_asset_names": "Blackwater Falls State Park; Canaan Valley Resort State Park; Canaan Valley National Wildlife Refuge; Dolly Sods Wilderness", "outfitters_in_town": 2, "total_business_count": 34, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.7, "pws_small_systems_under_100pop": 11, "municipal_pop_per_connection": 2.07}, {"town": "Parsons", "opportunity_score": 9, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Otter Creek Wilderness; Laurel Fork North Wilderness; Spruce Knob-Seneca Rocks NRA", "outfitters_in_town": 0, "total_business_count": 101, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.59, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 1.83}, {"town": "Durbin", "opportunity_score": 8, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area); Laurel Fork North Wilderness; Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 21, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.79, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.01}, {"town": "White Sulphur Springs", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 2, "recreation_asset_names": "The Greenbrier Resort (private, self-supplied); Greenbrier State Forest", "outfitters_in_town": 0, "total_business_count": 184, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.06}, {"town": "Cass", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 3, "recreation_asset_names": "Cass Scenic Railroad State Park; Greenbrier River Trail (terminus); Snowshoe Mountain Resort (private)", "outfitters_in_town": 0, "total_business_count": 10, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.45, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "Bruceton Mills", "opportunity_score": 7, "pressure_score": 2, "recreation_assets_nearby": 2, "recreation_asset_names": "Coopers Rock State Forest; Chestnut Ridge Regional Park (county, ~6mi)", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 5.7, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 4.02}, {"town": "Albright", "opportunity_score": 5, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.73, "pws_small_systems_under_100pop": 3, "municipal_pop_per_connection": 2.17}, {"town": "Hambleton", "opportunity_score": 4, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Otter Creek Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.38, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Hillsboro", "opportunity_score": 3, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Droop Mountain Battlefield State Park", "outfitters_in_town": 0, "total_business_count": 14, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": null}, {"town": "Arbovale", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Cranberry Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.25, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "Bartow", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.76, "pws_small_systems_under_100pop": 7, "municipal_pop_per_connection": null}, {"town": "Harman", "opportunity_score": 3, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Dolly Sods Wilderness", "outfitters_in_town": 0, "total_business_count": 9, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": 2.29}, {"town": "Kingwood", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 199, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.65, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": 2.36}, {"town": "Terra Alta", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 75, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.55, "pws_small_systems_under_100pop": 5, "municipal_pop_per_connection": 2.42}, {"town": "Rowlesburg", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 28, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.32, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.37}, {"town": "Thomas", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 1, "recreation_asset_names": "Canaan Valley National Wildlife Refuge", "outfitters_in_town": 0, "total_business_count": 60, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.31, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.01}, {"town": "Masontown", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 27, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.87, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.38}, {"town": "Aurora", "opportunity_score": 2, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Cathedral State Park", "outfitters_in_town": 0, "total_business_count": 17, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 8, "municipal_pop_per_connection": null}, {"town": "Green Bank", "opportunity_score": 2, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Green Bank Observatory", "outfitters_in_town": 0, "total_business_count": 24, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.93, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": null}, {"town": "Cheat Lake", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 243, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Brookhaven", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 121, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Hendricks", "opportunity_score": 1, "pressure_score": 1, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.12, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.28}, {"town": "Huntersville", "opportunity_score": 0, "pressure_score": 5, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 4, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Brandonville", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 5.71, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Frank", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 1.61, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "St. George", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.36, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}];
 
 function getQuad(d) {
   const hi = d.opportunity_score >= OPP_THRESH;
   const hp = d.pressure_score    >= PRESS_THRESH;
+  // High opp + Low press  = green  (top-left)
+  // Low opp  + Low press  = gray   (top-right)
+  // High opp + High press = orange (bottom-left)
+  // Low opp  + High press = red    (bottom-right)
   if ( hi && !hp) return "green";
+  if (!hi && !hp) return "gray";
   if ( hi &&  hp) return "orange";
-  if (!hi &&  hp) return "red";
-  return "gray";
+  return "red";
 }
 
-const QUAD_COLORS = {
-  green:  "#2d8a4e",
-  orange: "#d4850a",
-  red:    "#c62828",
-  gray:   "#888",
-};
+// ── Quadrant grid chips ────────────────────────────────────────────────────
+const sorted = [...towns].sort((a,b) =>
+  b.opportunity_score - a.opportunity_score || a.pressure_score - b.pressure_score
+);
 
-// ── Scatter chart ──────────────────────────────────────────────────────────
-const datasets = ["green","orange","red","gray"].map(q => ({
-  label: { green:"High opp / Low press", orange:"High opp / High press",
-            red:"Low opp / High press",   gray:"Low opp / Low press" }[q],
-  data: towns.filter(d => getQuad(d) === q).map(d => ({
-    x: d.opportunity_score,
-    y: d.pressure_score,
-    town: d.town,
-  })),
-  backgroundColor: QUAD_COLORS[q] + "cc",
-  borderColor:     QUAD_COLORS[q],
-  pointRadius: 7,
-  pointHoverRadius: 9,
-}));
+sorted.forEach(d => {
+  const q   = getQuad(d);
+  const pop = POP[d.town] ? POP[d.town].toLocaleString() : "—";
+  const container = document.getElementById(`q-${q}`);
 
-// custom label plugin
-const labelPlugin = {
-  id: "townLabels",
-  afterDatasetsDraw(chart) {
-    const ctx = chart.ctx;
-    ctx.save();
-    ctx.font = "11px -apple-system, sans-serif";
-    ctx.fillStyle = "#333";
-    ctx.textAlign = "left";
-    chart.data.datasets.forEach((ds, di) => {
-      ds.data.forEach((pt, pi) => {
-        const meta = chart.getDatasetMeta(di);
-        if (!meta.hidden) {
-          const el = meta.data[pi];
-          if (el) {
-            // nudge label right and slightly up
-            ctx.fillText(pt.town, el.x + 8, el.y - 3);
-          }
-        }
-      });
-    });
-    ctx.restore();
-  }
-};
+  const flags = [
+    d.on_karst           ? "⚠ On karst"     : null,
+    !d.has_municipal_cws ? "✗ No muni CWS"  : null,
+  ].filter(Boolean).join(" · ");
 
-// quadrant line plugin
-const quadPlugin = {
-  id: "quadLines",
-  beforeDraw(chart) {
-    const ctx = chart.ctx;
-    const xScale = chart.scales.x;
-    const yScale = chart.scales.y;
-    const xMid = xScale.getPixelForValue(OPP_THRESH);
-    const yMid = yScale.getPixelForValue(PRESS_THRESH);
-    const {top, bottom, left, right} = chart.chartArea;
-    ctx.save();
-    ctx.setLineDash([5,4]);
-    ctx.strokeStyle = "#bbb";
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(xMid, top);    ctx.lineTo(xMid, bottom); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(left, yMid);   ctx.lineTo(right, yMid);  ctx.stroke();
-
-    // quadrant labels
-    ctx.setLineDash([]);
-    ctx.font = "bold 10px -apple-system, sans-serif";
-    ctx.fillStyle = "#bbb";
-    const pad = 5;
-    ctx.textAlign = "left";
-    ctx.fillText("Ready to capture", xMid + pad, top + 14);
-    ctx.fillText("Watch closely",    xMid + pad, yMid + 14);
-    ctx.textAlign = "right";
-    ctx.fillText("Stable / off-trail",       xMid - pad, top + 14);
-    ctx.fillText("Vulnerable w/o upside",    xMid - pad, yMid + 14);
-    ctx.restore();
-  }
-};
-
-const ctx = document.getElementById("scatterChart").getContext("2d");
-new Chart(ctx, {
-  type: "scatter",
-  data: { datasets },
-  plugins: [quadPlugin, labelPlugin],
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } },
-      tooltip: {
-        callbacks: {
-          label: item => {
-            const d = towns.find(t => t.town === item.raw.town);
-            return [
-              item.raw.town,
-              `Opportunity: ${item.raw.x}  ·  Pressure: ${item.raw.y}`,
-              `Assets: ${d.recreation_assets_nearby}  ·  Businesses: ${d.total_business_count}`,
-            ];
-          },
-        },
-      },
-    },
-    scales: {
-      x: { title: { display: true, text: "Opportunity score →", color: "#555" },
-            min: -0.5, suggestedMax: 16,
-            grid: { color: "#f0f0ee" } },
-      y: { title: { display: true, text: "↑ Pressure score", color: "#555" },
-            min: -0.3, suggestedMax: 7,
-            grid: { color: "#f0f0ee" } },
-    },
-    onClick(e, els) {
-      if (!els.length) return;
-      const town = e.chart.data.datasets[els[0].datasetIndex].data[els[0].index].town;
-      const row = document.querySelector(`tr[data-town="${town}"]`);
-      if (row) {
-        row.scrollIntoView({behavior:"smooth", block:"center"});
-        row.style.outline = "2px solid #1a3a2a";
-        setTimeout(() => row.style.outline = "", 2000);
-      }
-    },
-  },
-});
-
-// ── Table ──────────────────────────────────────────────────────────────────
-let sortCol = 1, sortDir = -1;
-
-function buildTable(data) {
-  const tbody = document.getElementById("table-body");
-  tbody.innerHTML = "";
-  data.forEach(d => {
-    const q = getQuad(d);
-    const cwsNote = d.has_municipal_cws
-      ? `<span style="color:#2d8a4e;font-size:.7rem">✓ Municipal CWS (${d.municipal_pop_per_connection} pop/conn)</span>`
-      : `<span class="no-cws">✗ No municipal CWS</span>`;
-    const karstNote = d.on_karst
-      ? `<span class="karst-flag">⚠ On karst</span>`
-      : `<span style="color:#999;font-size:.7rem">${d.dist_to_karst_mi} mi to karst</span>`;
-    const tr = document.createElement("tr");
-    tr.className = `q-${q}`;
-    tr.dataset.town = d.town;
-    tr.dataset.quad = q;
-    tr.innerHTML = `
-      <td><span class="town-name">${d.town}</span></td>
-      <td><span class="score-pill pill-opp">${d.opportunity_score}</span></td>
-      <td><span class="score-pill pill-press">${d.pressure_score}</span></td>
-      <td>${d.recreation_assets_nearby}</td>
-      <td><div class="asset-list">${d.recreation_asset_names.replace(/; /g,"<br>")}</div></td>
-      <td>${d.outfitters_in_town}</td>
-      <td>${d.total_business_count}</td>
-      <td>${cwsNote}<br>${karstNote}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  updateSortHeaders();
-}
-
-function sortTable(col) {
-  if (col === sortCol) sortDir *= -1;
-  else { sortCol = col; sortDir = -1; }
-  const sorted = [...towns].sort((a,b) => {
-    const vals = [
-      [a.town, b.town],
-      [a.opportunity_score, b.opportunity_score],
-      [a.pressure_score, b.pressure_score],
-      [a.recreation_assets_nearby, b.recreation_assets_nearby],
-      [a.recreation_asset_names, b.recreation_asset_names],
-      [a.outfitters_in_town, b.outfitters_in_town],
-      [a.total_business_count, b.total_business_count],
-    ];
-    const [av, bv] = vals[col];
-    return av < bv ? sortDir : av > bv ? -sortDir : 0;
-  });
-  buildTable(sorted);
-  applyFilter(currentFilter);
-}
-
-function updateSortHeaders() {
-  document.querySelectorAll("thead th").forEach((th, i) => {
-    th.classList.remove("sorted-asc","sorted-desc");
-    if (i === sortCol) th.classList.add(sortDir === -1 ? "sorted-desc" : "sorted-asc");
-  });
-}
-
-let currentFilter = "all";
-function filterQuad(btn) {
-  currentFilter = btn.dataset.q;
-  document.querySelectorAll(".qbtn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  applyFilter(currentFilter);
-}
-
-function applyFilter(q) {
-  document.querySelectorAll("#table-body tr").forEach(tr => {
-    tr.classList.toggle("hidden", q !== "all" && tr.dataset.quad !== q);
-  });
-}
-
-buildTable(towns);
-</script>
-</body>
-</html>
+  const assetSnip = d.recreation_assets_nearby > 0
+    ? d.recreation_asset_names.replace(/; /g, ", ").sub

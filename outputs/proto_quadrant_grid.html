@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quadrant Grid — ALT Corridor Towns</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         background: #f4f4f2; padding: 24px;
+         display: flex; flex-direction: column; align-items: center; }
+  h2 { font-size: 1rem; color: #333; margin-bottom: 4px; }
+  p  { font-size: .78rem; color: #888; margin-bottom: 20px; text-align: center; }
+
+  .grid-wrap {
+    display: grid;
+    grid-template-columns: 28px 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    width: 820px;
+  }
+
+  /* Axis labels */
+  .ax-corner { grid-column:1; grid-row:1; }
+
+  .ax-top { grid-column:2/4; grid-row:1;
+    display:flex; gap:0; }
+  .ax-top-cell {
+    flex:1; text-align:center;
+    font-size:.7rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.06em; padding:4px 0; border-radius:4px; }
+  .ax-top-cell.high { color:#2d8a4e; background:#edf7f1; }
+  .ax-top-cell.low  { color:#888;    background:#f0f0ee; margin-left:10px; }
+
+  .ax-left { grid-column:1; grid-row:2/4;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:space-around; }
+  .ax-left-label {
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-size:.7rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.06em; white-space:nowrap; padding:4px 0; }
+  .ax-left-label.low  { color:#2d8a4e; }  /* low pressure = good */
+  .ax-left-label.high { color:#c62828; }
+
+  /* Quadrant cards */
+  .quad {
+    border-radius:8px; padding:14px 16px;
+    box-shadow:0 1px 4px rgba(0,0,0,.08); min-height:200px;
+  }
+  .quad-header {
+    display:flex; flex-direction:column; gap:2px;
+    margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid;
+  }
+  .quad-title { font-size:.78rem; font-weight:700;
+                text-transform:uppercase; letter-spacing:.06em; }
+  .quad-sub   { font-size:.68rem; color:#777; }
+
+  .quad.green  { background:#f0f9f4; }
+  .quad.gray   { background:#fafaf8; }
+  .quad.orange { background:#fff8ee; }
+  .quad.red    { background:#fff2f2; }
+
+  .quad.green  .quad-header { border-color:#2d8a4e; }
+  .quad.gray   .quad-header { border-color:#aaa; }
+  .quad.orange .quad-header { border-color:#d4850a; }
+  .quad.red    .quad-header { border-color:#c62828; }
+
+  .quad.green  .quad-title { color:#2d8a4e; }
+  .quad.gray   .quad-title { color:#888; }
+  .quad.orange .quad-title { color:#d4850a; }
+  .quad.red    .quad-title { color:#c62828; }
+
+  /* Town chips */
+  .town-list { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip {
+    display:inline-flex; align-items:center; gap:5px;
+    border-radius:4px; padding:5px 9px; cursor:default;
+    font-size:.78rem; border:1px solid transparent;
+    transition:transform .1s, box-shadow .1s;
+    position:relative;
+  }
+  .chip:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(0,0,0,.14); z-index:5; }
+  .chip:hover .chip-tip { display:block; }
+
+  .quad.green  .chip { background:#d4f0e0; border-color:#a8ddc0; color:#1a5c35; }
+  .quad.gray   .chip { background:#e8e8e6; border-color:#ccc;    color:#444;    }
+  .quad.orange .chip { background:#fde8c0; border-color:#f5c878; color:#7a4800; }
+  .quad.red    .chip { background:#fdd8d8; border-color:#f5a8a8; color:#7a1515; }
+
+  .chip .scores { font-size:.68rem; opacity:.65; }
+
+  /* Tooltip */
+  .chip-tip {
+    display:none; position:absolute; bottom:calc(100% + 7px); left:50%;
+    transform:translateX(-50%); background:#1a3a2a; color:#fff;
+    padding:9px 12px; border-radius:6px; font-size:.72rem;
+    white-space:nowrap; z-index:20; pointer-events:none;
+    line-height:1.6; min-width:210px;
+    box-shadow:0 3px 12px rgba(0,0,0,.3);
+  }
+  .chip-tip::after {
+    content:""; position:absolute; top:100%; left:50%;
+    transform:translateX(-50%); border:5px solid transparent;
+    border-top-color:#1a3a2a;
+  }
+  .tip-row  { display:flex; justify-content:space-between; gap:16px; }
+  .tip-label{ color:#7dd9a0; }
+  .tip-flag { color:#f9b4b4; }
+  .tip-assets{ color:#adc; font-size:.68rem; margin-top:3px;
+               white-space:normal; max-width:260px; line-height:1.4; }
+</style>
+</head>
+<body>
+<h2>ALT Corridor — Opportunity vs. Pressure by Town</h2>
+<p>High opportunity · Low pressure = top-left &nbsp;·&nbsp; hover any town for detail</p>
+
+<div class="grid-wrap">
+
+  <!-- Corner -->
+  <div class="ax-corner"></div>
+
+  <!-- Column headers (opportunity) -->
+  <div class="ax-top">
+    <div class="ax-top-cell high">▲ Higher opportunity</div>
+    <div class="ax-top-cell low">Lower opportunity</div>
+  </div>
+
+  <!-- Row label: Low pressure (top rows) -->
+  <div class="ax-left">
+    <div class="ax-left-label low">Lower pressure ↑</div>
+    <div class="ax-left-label high">↓ Higher pressure</div>
+  </div>
+
+  <!-- TOP-LEFT: High opp, Low press → GREEN "Positioned to Capture" -->
+  <div class="quad green" style="grid-column:2;grid-row:2">
+    <div class="quad-header">
+      <span class="quad-title">Positioned to Capture</span>
+      <span class="quad-sub">Strong assets · stable infrastructure</span>
+    </div>
+    <div class="town-list" id="q-green"></div>
+  </div>
+
+  <!-- TOP-RIGHT: Low opp, Low press → GRAY "Stable Baseline" -->
+  <div class="quad gray" style="grid-column:3;grid-row:2">
+    <div class="quad-header">
+      <span class="quad-title">Stable Baseline</span>
+      <span class="quad-sub">Lower trail exposure · solid infrastructure</span>
+    </div>
+    <div class="town-list" id="q-gray"></div>
+  </div>
+
+  <!-- BOTTOM-LEFT: High opp, High press → ORANGE "Invest Before Scaling" -->
+  <div class="quad orange" style="grid-column:2;grid-row:3">
+    <div class="quad-header">
+      <span class="quad-title">Invest Before Scaling</span>
+      <span class="quad-sub">Real draw · infrastructure needs attention</span>
+    </div>
+    <div class="town-list" id="q-orange"></div>
+  </div>
+
+  <!-- BOTTOM-RIGHT: Low opp, High press → RED "Infrastructure First" -->
+  <div class="quad red" style="grid-column:3;grid-row:3">
+    <div class="quad-header">
+      <span class="quad-title">Infrastructure First</span>
+      <span class="quad-sub">Capacity investment needed before growth</span>
+    </div>
+    <div class="town-list" id="q-red"></div>
+  </div>
+
+</div>
+
+<script>
+// 2020 Census population (approximate; ACS 5-year / decennial)
+const POP = {
+  "Marlinton":931, "Davis":606, "Parsons":1315, "Durbin":217,
+  "White Sulphur Springs":2199, "Cass":60, "Bruceton Mills":518,
+  "Albright":179, "Hambleton":298, "Hillsboro":175, "Arbovale":90,
+  "Bartow":85, "Harman":350, "Kingwood":2761, "Terra Alta":1329,
+  "Rowlesburg":494, "Thomas":572, "Masontown":533, "Aurora":209,
+  "Green Bank":130, "Cheat Lake":9210, "Brookhaven":4312,
+  "Hendricks":238, "Huntersville":25, "Brandonville":75,
+  "Frank":15, "St. George":401
+};
+
+const towns = [{"town":"Marlinton","opportunity_score":15,"pressure_score":2,"recreation_assets_nearby":5,"recreation_asset_names":"Watoga State Park; Beartown State Park; Droop Mountain Battlefield State Park; Greenbrier River Trail (direct connection); Seneca State Forest","total_business_count":167,"has_municipal_cws":true,"on_karst":false},{"town":"Davis","opportunity_score":11,"pressure_score":2,"recreation_assets_nearby":4,"recreation_asset_names":"Blackwater Falls State Park; Canaan Valley Resort State Park; Canaan Valley National Wildlife Refuge; Dolly Sods Wilderness","total_business_count":34,"has_municipal_cws":true,"on_karst":false},{"town":"Parsons","opportunity_score":9,"pressure_score":2,"recreation_assets_nearby":3,"recreation_asset_names":"Otter Creek Wilderness; Laurel Fork North Wilderness; Spruce Knob-Seneca Rocks NRA","total_business_count":101,"has_municipal_cws":true,"on_karst":false},{"town":"Durbin","opportunity_score":8,"pressure_score":2,"recreation_assets_nearby":3,"recreation_asset_names":"Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area); Laurel Fork North Wilderness; Laurel Fork South Wilderness","total_business_count":21,"has_municipal_cws":true,"on_karst":false},{"town":"White Sulphur Springs","opportunity_score":7,"pressure_score":4,"recreation_assets_nearby":2,"recreation_asset_names":"The Greenbrier Resort (private, self-supplied); Greenbrier State Forest","total_business_count":184,"has_municipal_cws":true,"on_karst":true},{"town":"Cass","opportunity_score":7,"pressure_score":4,"recreation_assets_nearby":3,"recreation_asset_names":"Cass Scenic Railroad State Park; Greenbrier River Trail (terminus); Snowshoe Mountain Resort (private)","total_business_count":10,"has_municipal_cws":false,"on_karst":false},{"town":"Bruceton Mills","opportunity_score":7,"pressure_score":2,"recreation_assets_nearby":2,"recreation_asset_names":"Coopers Rock State Forest; Chestnut Ridge Regional Park (county, ~6mi)","total_business_count":20,"has_municipal_cws":true,"on_karst":false},{"town":"Albright","opportunity_score":5,"pressure_score":2,"recreation_assets_nearby":1,"recreation_asset_names":"Cheat Canyon Wildlife Management Area","total_business_count":20,"has_municipal_cws":true,"on_karst":false},{"town":"Hambleton","opportunity_score":4,"pressure_score":3,"recreation_assets_nearby":1,"recreation_asset_names":"Otter Creek Wilderness","total_business_count":8,"has_municipal_cws":false,"on_karst":false},{"town":"Hillsboro","opportunity_score":3,"pressure_score":6,"recreation_assets_nearby":1,"recreation_asset_names":"Droop Mountain Battlefield State Park","total_business_count":14,"has_municipal_cws":false,"on_karst":true},{"town":"Arbovale","opportunity_score":3,"pressure_score":5,"recreation_assets_nearby":1,"recreation_asset_names":"Cranberry Wilderness","total_business_count":8,"has_municipal_cws":false,"on_karst":false},{"town":"Bartow","opportunity_score":3,"pressure_score":5,"recreation_assets_nearby":1,"recreation_asset_names":"Laurel Fork South Wilderness","total_business_count":5,"has_municipal_cws":false,"on_karst":false},{"town":"Harman","opportunity_score":3,"pressure_score":3,"recreation_assets_nearby":1,"recreation_asset_names":"Dolly Sods Wilderness","total_business_count":9,"has_municipal_cws":true,"on_karst":true},{"town":"Kingwood","opportunity_score":3,"pressure_score":2,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":199,"has_municipal_cws":true,"on_karst":false},{"town":"Terra Alta","opportunity_score":3,"pressure_score":2,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":75,"has_municipal_cws":true,"on_karst":false},{"town":"Rowlesburg","opportunity_score":3,"pressure_score":2,"recreation_assets_nearby":1,"recreation_asset_names":"Cheat Canyon Wildlife Management Area","total_business_count":28,"has_municipal_cws":true,"on_karst":false},{"town":"Thomas","opportunity_score":3,"pressure_score":0,"recreation_assets_nearby":1,"recreation_asset_names":"Canaan Valley National Wildlife Refuge","total_business_count":60,"has_municipal_cws":true,"on_karst":false},{"town":"Masontown","opportunity_score":3,"pressure_score":0,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":27,"has_municipal_cws":true,"on_karst":false},{"town":"Aurora","opportunity_score":2,"pressure_score":6,"recreation_assets_nearby":1,"recreation_asset_names":"Cathedral State Park","total_business_count":17,"has_municipal_cws":false,"on_karst":true},{"town":"Green Bank","opportunity_score":2,"pressure_score":2,"recreation_assets_nearby":1,"recreation_asset_names":"Green Bank Observatory","total_business_count":24,"has_municipal_cws":false,"on_karst":false},{"town":"Cheat Lake","opportunity_score":1,"pressure_score":4,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":243,"has_municipal_cws":false,"on_karst":true},{"town":"Brookhaven","opportunity_score":1,"pressure_score":4,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":121,"has_municipal_cws":false,"on_karst":true},{"town":"Hendricks","opportunity_score":1,"pressure_score":1,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":5,"has_municipal_cws":true,"on_karst":false},{"town":"Huntersville","opportunity_score":0,"pressure_score":5,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":4,"has_municipal_cws":false,"on_karst":true},{"town":"Brandonville","opportunity_score":0,"pressure_score":3,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":2,"has_municipal_cws":false,"on_karst":false},{"town":"Frank","opportunity_score":0,"pressure_score":3,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":2,"has_municipal_cws":false,"on_karst":false},{"town":"St. George","opportunity_score":0,"pressure_score":3,"recreation_assets_nearby":0,"recreation_asset_names":"none mapped","total_business_count":2,"has_municipal_cws":false,"on_karst":false}];
+
+const OPP_T = 5, PRESS_T = 3;
+
+function quadKey(d) {
+  const hi = d.opportunity_score >= OPP_T;
+  const hp = d.pressure_score    >= PRESS_T;
+  // New layout: high opp + low press = green (top-left)
+  if ( hi && !hp) return "green";
+  if (!hi && !hp) return "gray";
+  if ( hi &&  hp) return "orange";
+  return "red";
+}
+
+// Sort within quadrant: opp desc, then press asc (best first)
+const sorted = [...towns].sort((a,b) =>
+  b.opportunity_score - a.opportunity_score || a.pressure_score - b.pressure_score
+);
+
+sorted.forEach(d => {
+  const q   = quadKey(d);
+  const pop = POP[d.town] ? POP[d.town].toLocaleString() : "—";
+  const container = document.getElementById(`q-${q}`);
+
+  const flags = [
+    d.on_karst          ? "⚠ On karst"     : null,
+    !d.has_municipal_cws ? "✗ No muni CWS" : null,
+  ].filter(Boolean).join(" &nbsp;·&nbsp; ");
+
+  const assetSnip = d.recreation_assets_nearby > 0
+    ? d.recreation_asset_names.replace(/; /g, ", ").substring(0, 90)
+      + (d.recreation_asset_names.length > 90 ? "…" : "")
+    : "No mapped assets";
+
+  const chip = document.createElement("div");
+  chip.className = "chip";
+  chip.innerHTML = `
+    <div class="chip-tip">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:4px">${d.town}</div>
+      <div class="tip-row">
+        <span><span class="tip-label">Population</span>&nbsp; ${pop}</span>
+        <span><span class="tip-label">Businesses</span>&nbsp; ${d.total_business_count}</span>
+      </div>
+      <div class="tip-row">
+        <span><span class="tip-label">Opportunity</span>&nbsp; ${d.opportunity_score}</span>
+        <span><span class="tip-label">Pressure</span>&nbsp; ${d.pressure_score}</span>
+        <span><span class="tip-label">Assets</span>&nbsp; ${d.recreation_assets_nearby}</span>
+      </div>
+      ${flags ? `<div class="tip-flag" style="margin-top:3px">${flags}</div>` : ""}
+      <div class="tip-assets">${assetSnip}</div>
+    </div>
+    <span class="name">${d.town}</span>
+    <span class="scores">${d.opportunity_score}·${d.pressure_score}</span>
+  `;
+  container.appendChild(chip);
+});
+</script>
+</body>
+</html>
