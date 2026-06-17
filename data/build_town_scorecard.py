@@ -83,19 +83,85 @@ outfitter_counts.index = outfitter_counts.index.str.replace(", WV", "", regex=Fa
 
 # --- Recreation asset proximity (recreation lands within ~10mi of town, by name match heuristic) ---
 # Hand-mapped from earlier project analysis: which corridor towns sit at/near
-# which major recreation assets (state parks/forests/USFS/observatory).
+# which major recreation assets (state parks/forests/USFS/observatory/private).
+# Updated v3: added 9 public lands (Cooper's Rock, Cheat Canyon WMA, Canaan Valley NWR,
+# Dolly Sods, Otter Creek Wilderness, Laurel Fork N/S, Spruce Knob-Seneca Rocks NRA,
+# Cranberry Wilderness) and 2 private facilities (Snowshoe Mountain Resort,
+# The Greenbrier Resort). Private facilities marked with "(private)".
 RECREATION_NEAR_TOWN = {
-    "DAVIS": ["Blackwater Falls State Park", "Canaan Valley Resort State Park"],
-    "AURORA": ["Cathedral State Park"],
-    "BRUCETON MILLS": ["Cooper's Rock State Forest (near, unmapped)", "Chestnut Ridge Park (near, unmapped)"],
-    "PARSONS": ["Monongahela NF - Otter Creek/Spruce Knob area (near)"],
-    "MARLINTON": ["Watoga State Park", "Beartown State Park", "Droop Mountain Battlefield SP",
-                   "Greenbrier River Trail (direct connection)"],
-    "HILLSBORO": ["Droop Mountain Battlefield State Park"],
-    "CASS": ["Cass Scenic Railroad State Park", "Greenbrier River Trail (terminus)"],
-    "GREEN BANK": ["Green Bank Observatory"],
-    "DURBIN": ["Monongahela NF (Cheat Mountain area)"],
-    "WHITE SULPHUR SPRINGS": ["Greenbrier Resort (self-supplied, not public rec)"],
+    # Section 1 — Bruceton Mills to Blackwater Falls
+    "BRUCETON MILLS": [
+        "Coopers Rock State Forest",
+        "Chestnut Ridge Regional Park (county, ~6mi)",
+    ],
+    "ALBRIGHT": [
+        "Cheat Canyon Wildlife Management Area",
+    ],
+    "ROWLESBURG": [
+        "Cheat Canyon Wildlife Management Area",
+    ],
+    # Section 1 — Tucker County
+    "DAVIS": [
+        "Blackwater Falls State Park",
+        "Canaan Valley Resort State Park",
+        "Canaan Valley National Wildlife Refuge",
+        "Dolly Sods Wilderness",
+    ],
+    "THOMAS": [
+        "Canaan Valley National Wildlife Refuge",
+    ],
+    "AURORA": [
+        "Cathedral State Park",
+    ],
+    # Section 1/2 — Tucker/Randolph
+    "PARSONS": [
+        "Otter Creek Wilderness",
+        "Laurel Fork North Wilderness",
+        "Spruce Knob-Seneca Rocks NRA",
+    ],
+    "HAMBLETON": [
+        "Otter Creek Wilderness",
+    ],
+    "HARMAN": [
+        "Dolly Sods Wilderness",
+    ],
+    # Section 2 — Randolph/Pocahontas
+    "DURBIN": [
+        "Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area)",
+        "Laurel Fork North Wilderness",
+        "Laurel Fork South Wilderness",
+    ],
+    "BARTOW": [
+        "Laurel Fork South Wilderness",
+    ],
+    "ARBOVALE": [
+        "Cranberry Wilderness (~8.4mi from corridor)",
+    ],
+    # Section 2/3 — Pocahontas
+    "CASS": [
+        "Cass Scenic Railroad State Park",
+        "Greenbrier River Trail (terminus)",
+        "Snowshoe Mountain Resort (private, ~15mi)",
+    ],
+    "GREEN BANK": [
+        "Green Bank Observatory",
+    ],
+    # Section 3 — Marlinton area
+    "MARLINTON": [
+        "Watoga State Park",
+        "Beartown State Park",
+        "Droop Mountain Battlefield State Park",
+        "Greenbrier River Trail (direct connection)",
+        "Seneca State Forest",
+    ],
+    "HILLSBORO": [
+        "Droop Mountain Battlefield State Park",
+    ],
+    # Section 4 — Greenbrier County
+    "WHITE SULPHUR SPRINGS": [
+        "The Greenbrier Resort (private, self-supplied)",
+        "Greenbrier State Forest",
+    ],
 }
 
 # --- Karst geology: does this town sit on (or very near) mapped karst? ---
@@ -146,34 +212,4 @@ for _, r in biz.iterrows():
 df = pd.DataFrame(rows)
 
 # --- Scoring ---
-# OPPORTUNITY: recreation assets nearby + outfitter presence + existing
-# business density (proxy for whether the town already has infrastructure
-# to build on). Simple additive score, not normalized to a fixed scale -
-# meant for relative ranking within this corridor, not absolute benchmarking.
-df["opportunity_score"] = (
-    df["recreation_assets_nearby"] * 2
-    + (df["outfitters_in_town"] > 0).astype(int) * 2
-    + pd.cut(df["businesses_per_sq_mi"], bins=[-1, 10, 30, 60, 1000], labels=[0, 1, 2, 3]).astype(int)
-)
-
-# PRESSURE: many small/transient water systems (fragmented capacity, no
-# municipal backbone) + no municipal CWS at all (no central system to lean
-# on for growth) + very thin existing business base (limited absorption
-# capacity / no slack) + sitting on mapped karst (groundwater contamination
-# risk from private wells/septic, compounding the water-capacity concern
-# with a real environmental one). Higher = more exposed to tourism-driven
-# stress.
-df["pressure_score"] = (
-    (df["pws_small_systems_under_100pop"] >= 3).astype(int) * 2
-    + (~df["has_municipal_cws"]).astype(int) * 2
-    + (df["total_business_count"] < 10).astype(int) * 1
-    + df["on_karst"].astype(int) * 2
-)
-
-df = df.sort_values(["opportunity_score", "pressure_score"], ascending=[False, False])
-df.to_csv(f"{OUT}/town_scorecard.csv", index=False)
-
-print(f"Wrote {len(df)}-town scorecard")
-print(df[["town", "opportunity_score", "pressure_score", "recreation_assets_nearby",
-           "outfitters_in_town", "pws_small_systems_under_100pop", "has_municipal_cws",
-           "on_karst", "total_business_count"]].to_string(index=False))
+# OPPORTUNITY: recreatio
