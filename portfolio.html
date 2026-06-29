@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John Meeker | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            line-height: 1.7;
+            color: #2c2c2c;
+            background: linear-gradient(135deg, #f4ede4 0%, #e8dcc8 100%);
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #5a4a42 0%, #3d3430 100%);
+            color: #f4ede4;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        nav {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+        nav a {
+            color: #5a4a42;
+            text-decoration: none;
+            margin-right: 30px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #d4a574;
+        }
+        section {
+            background: white;
+            margin-bottom: 40px;
+            padding: 50px;
+            border-radius: 3px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            border-left: 6px solid #d4a574;
+        }
+        section h2 {
+            color: #5a4a42;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #d4a574;
+        }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .portfolio-item {
+            background: #f9fbff;
+            padding: 25px;
+            border-radius: 6px;
+            border-left: 4px solid #d4a574;
+        }
+        .portfolio-item h3 {
+            color: #5a4a42;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        .pdf-embed {
+            width: 100%;
+            height: 400px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .pdf-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #5a4a42 0%, #3d3430 100%);
+            color: #f4ede4;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        .pdf-link:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(90, 74, 66, 0.3);
+        }
+        .web-project {
+            background: #f5f0e8;
+            padding: 30px;
+            border-radius: 6px;
+            border-left: 4px solid #d4a574;
+            margin-bottom: 30px;
+        }
+        .web-project h3 {
+            color: #5a4a42;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .web-project p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .web-project a {
+            color: #d4a574;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid #d4a574;
+            display: inline-block;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.95em;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.6em;
+            }
+            section {
+                padding: 30px;
+            }
+            section h2 {
+                font-size: 1.4em;
+            }
+            nav a {
+                margin-right: 15px;
+                font-size: 0.9em;
+            }
+            .pdf-embed {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>John Meeker</h1>
+        <p>Portfolio & Design Work</p>
+    </header>
+    <nav class="container">
+        <a href="/">← Back to Home</a>
+        <a href="#writing">Writing Samples</a>
+        <a href="#designs">Design Work</a>
+        <a href="#web">Web Projects</a>
+    </nav>
+    <div class="container">
+        <!-- Writing Samples -->
+        <section id="writing">
+            <h2>Writing Samples</h2>
+            <p style="color: #666; margin-bottom: 30px;">Press releases, community communications, presentations, and current projects for Shepherdstown Shares, StreetFest events, and regional workforce initiatives.</p>
+            <div style="background: #f0f7ee; padding: 25px; border-radius: 6px; border-left: 4px solid #5a8a5a; margin-bottom: 30px;">
+                <h3 style="color: #3e5c43; margin-bottom: 10px; font-size: 1.1em;">Presentation: Understanding the Appalachian Workforce</h3>
+                <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">A seminar by Rachael Meads (Shepherd University &amp; Blue Ridge CTC) exploring core values, workplace challenges, and practical guidance for employers working in Appalachian communities. Covers loyalty, community, place, reciprocity, and strategies for culturally respectful management.</p>
+                <a href="./portfolio/appalachian-workforce.pptx" target="_blank" class="pdf-link">Download PowerPoint &#8594;</a>
+            </div>
+            <div style="background: #fef9f0; padding: 25px; border-radius: 6px; border-left: 4px solid #ff6b35; margin-bottom: 30px;">
+                <h3 style="color: #5a4a42; margin-bottom: 10px; font-size: 1.1em;">Current Project: Shepherdstown Shares IT Service Catalog</h3>
+                <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Comprehensive IT service catalog documenting all technology services, infrastructure, support processes, and SLAs for Shepherdstown Shares. Includes service categories, department roles, and operational standards.</p>
+                <a href="./portfolio/ss-it-catalog.pdf" target="_blank" class="pdf-link">View Catalog (PDF) →</a>
+            </div>
+            <h3 style="color: #5a4a42; margin-bottom: 20px; font-size: 1.1em; font-weight: 700; padding-top: 10px; border-top: 2px solid #d4a574;">Press Releases</h3>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <h3>Stuff the Truck 2025</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Press release for flood relief supply drive response in West Virginia's Northern Panhandle. Emphasizes community collaboration and urgency.</p>
+                    <a href="./portfolio/stuff-truck-2025.html" target="_blank" class="pdf-link">Read Press Release →</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>StreetFest 2024</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Annual event announcement celebrating art, music, and community. Highlights performers, vendors, and Shepherdstown's cultural significance.</p>
+                    <a href="./portfolio/streetfest-2024.html" target="_blank" class="pdf-link">Read Press Release →</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Senior Prom 2025</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Inaugural Senior Citizen social event announcement. Celebrates older adults in the community with warmth and dignity.</p>
+                    <a href="./portfolio/senior-prom-2025.html" target="_blank" class="pdf-link">Read Press Release →</a>
+                </div>
+            </div>
+        </section>
+        <!-- Design Work -->
+        <section id="designs">
+            <h2>Design Work</h2>
+            <p style="color: #666; margin-bottom: 30px;">Collection of promotional materials and event designs for Shepherdstown Shares and community events.</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <h3>Toy Drive 2024</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Event flyer for Shepherdstown Shares' annual holiday toy drive. Designed to drive community donations and volunteer participation. Created in Canva with a warm, family-friendly visual approach.</p>
+                    <iframe class="pdf-embed" src="./portfolio/shares-toy-drive-24.pdf"></iframe>
+                    <a href="./portfolio/shares-toy-drive-24.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Cookout at the Pantry</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">A collaboration with Shepherd University and their Aramark food service provider for the first Shepherdstown Shares open house. Community outreach flyer for a free family cookout at Trinity Episcopal Churchyard, featuring live music, kids' games, and pantry tours. Designed to drive attendance and celebrate community gathering.</p>
+                    <iframe class="pdf-embed" src="./portfolio/cookout-at-pantry.pdf"></iframe>
+                    <a href="./portfolio/cookout-at-pantry.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>SOH 2025 Rack Card</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Rack card produced for Shepherdstown Shares' participation in the NALC Stamp Out Hunger national food drive — one of the largest single-day food drives in the United States. Designed for distribution at community locations to drive donations and awareness.</p>
+                    <iframe class="pdf-embed" src="./portfolio/soh-2025-rack-card.pdf"></iframe>
+                    <a href="./portfolio/soh-2025-rack-card.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Multigras Potluck</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Event flyer for a community celebration blending Mardi Gras and Lunar New Year traditions — designed to be festive, inclusive, and welcoming to a diverse Shepherdstown audience. Created in Canva.</p>
+                    <iframe class="pdf-embed" src="./portfolio/multigras-potluck.pdf"></iframe>
+                    <a href="./portfolio/multigras-potluck.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Senior Prom</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Promotional materials for a community senior prom event hosted by Shepherdstown Shares, celebrating older adults in the community. Designed to feel joyful and dignified.</p>
+                    <iframe class="pdf-embed" src="./portfolio/senior-prom.pdf"></iframe>
+                    <a href="./portfolio/senior-prom.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Stuff the Truck</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Urgent community outreach materials for a flood relief supply and fundraising drive supporting communities in West Virginia's Northern Panhandle following the 2025 floods. Designed for fast turnaround and maximum visibility.</p>
+                    <iframe class="pdf-embed" src="./portfolio/stuffs-the-truck.pdf"></iframe>
+                    <a href="./portfolio/stuffs-the-truck.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>People's Ball 2026</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Promotional design for People's Ball, an annual New Year's Eve community celebration in Shepherdstown — an event John Meeker created to bring the town together. Reflects the energy and warmth of the tradition.</p>
+                    <iframe class="pdf-embed" src="./portfolio/peoples-ball-2026.pdf"></iframe>
+                    <a href="./portfolio/peoples-ball-2026.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+                <div class="portfolio-item">
+                    <h3>StreetFest 2025</h3>
+                    <p style="color: #666; font-size: 0.9em; line-height: 1.6; margin-bottom: 15px;">Event materials for Shepherdstown StreetFest, the community street festival John Meeker revived and led as Executive Director. Designed to capture the spirit of the event and drive attendance and sponsorship.</p>
+                    <iframe class="pdf-embed" src="./portfolio/streetfest-legendary.pdf"></iframe>
+                    <a href="./portfolio/streetfest-legendary.pdf" target="_blank" class="pdf-link">View PDF</a>
+                </div>
+            </div>
+        </section>
+        <!-- Web Projects -->
+        <section id="web">
+            <h2>Web Projects</h2>
+            <p style="color: #666; margin-bottom: 30px;">Websites and digital presence work showcasing design and strategy.</p>
+            <div class="web-project">
+                <h3>ALT Corridor — Recreation Capacity Dashboard</h3>
+                <p>
+                    Interactive analysis of where recreation assets create opportunity and where tourism might create pressure across 27 towns along the Allegheny Trail corridor in West Virginia. Part of the ALT-EXP economic impact study. Combines a recreation asset inventory (26 public lands, 4 private/commercial facilities), EPA water system data, WVGES karst geology, and business density into a per-town opportunity/pressure scorecard with quadrant visualization, sortable data table, and an interactive map.
+                </p>
+                <p>
+                    Built with: Python (GeoPandas, Folium), HTML/CSS/JS, EPA SDWIS, WVGES 1968 karst layer, US Census TIGER
+                </p>
+                <a href="/portfolio/alt-dashboard/" target="_blank">View Dashboard →</a>
+            </div>
+            <div class="web-project">
+                <h3>Shepherdstown Shares Website Redesign</h3>
+                <p>
+                    Modern website redesign for a local food security nonprofit serving 700+ clients monthly. Features bold, colorful design with integrated photography and clear calls-to-action for donations, volunteering, and community support.
+                </p>
+                <p>
+                    Built with: HTML/CSS, responsive design, modern UI/UX principles, community-focused branding
+                </p>
+                <a href="/shepherdstown-shares/" target="_blank">View Live Demo →</a>
+            </div>
+            <div class="web-project">
+                <h3>Shepherdstown StreetFest Website</h3>
+                <p>
+                    Primary website for Shepherdstown StreetFest, the community street festival that John Meeker revived and led as Executive Director. Showcases the event's mission, schedule, vendor/sponsorship information, and community impact.
+                </p>
+                <p>
+                    Visit online at: <a href="https://www.shepherdstownstreetfest.org" target="_blank">shepherdstownstreetfest.org</a>
+                </p>
+            </div>
+            <div class="web-project">
+                <h3>GitHub Profile</h3>
+                <p>
+                    Code projects and contributions. Follow for data analysis, automation scripts, and nonprofit tech work.
+                </p>
+                <p>
+                    <a href="https://github.com/meekerwv-boop" target="_blank">github.com/meekerwv-boop →</a>
+                </p>
+            </div>
+        </section>
+        <footer>
+            <p>&copy; 2026 John Meeker. Portfolio & design work.</p>
+        </footer>
+    </div>
+</body>
+</html>

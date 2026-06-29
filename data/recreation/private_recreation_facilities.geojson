@@ -1,0 +1,81 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.9947,
+          38.4089
+        ]
+      },
+      "properties": {
+        "name": "Snowshoe Mountain Resort",
+        "facility_type": "ski_mountain_resort",
+        "ownership": "private",
+        "agency": "Snowshoe Mountain Inc. (Alterra Mountain Co.)",
+        "notes": "WV's largest ski resort; 4,848ft summit; 60 trails, 1,500ft vertical; year-round mountain biking, hiking, summer activities; ~15mi from Cass; Pocahontas County",
+        "in_corridor": true,
+        "data_quality": "coordinates from Wikipedia"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.05,
+          38.435
+        ]
+      },
+      "properties": {
+        "name": "Elk River Touring Center",
+        "facility_type": "eco_lodge_outfitter",
+        "ownership": "private",
+        "agency": "Private (Elk River Inn & Cabins)",
+        "notes": "Slatyfork, Pocahontas County; XC skiing, mountain biking, fly fishing guiding; inn and cabins; on headwaters of Elk River near Snowshoe; ~2.6mi from corridor",
+        "in_corridor": false,
+        "data_quality": "approximate coordinates (street address: 34037 Seneca Trl, Slaty Fork WV)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.3005,
+          37.7883
+        ]
+      },
+      "properties": {
+        "name": "The Greenbrier Resort",
+        "facility_type": "destination_resort",
+        "ownership": "private",
+        "agency": "The Greenbrier (private)",
+        "notes": "Historic luxury resort near White Sulphur Springs; self-supplied water system (not public rec); golf, spa, casino, event facilities; potential corridor anchor at Section 4",
+        "in_corridor": true,
+        "data_quality": "coordinates approximate; resort grounds are in corridor"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.937,
+          39.6515
+        ]
+      },
+      "properties": {
+        "name": "Chestnut Ridge Regional Park",
+        "facility_type": "county_park",
+        "ownership": "public_county",
+        "agency": "Monongalia County Parks & Recreation",
+        "notes": "County-run campground/park surrounded by Coopers Rock SF and WVU Forest; full-hookup RV sites, hiking, fishing ponds; 10mi east of Morgantown; ~6mi from corridor",
+        "in_corridor": false,
+        "data_quality": "coordinates from WV Tourism / Monongalia County"
+      }
+    }
+  ]
+}

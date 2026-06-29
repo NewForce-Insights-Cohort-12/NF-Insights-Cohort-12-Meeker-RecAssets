@@ -1,0 +1,26 @@
+name,facility_type,address,county,notes,corridor_town
+Snowshoe Mountain Resort,ski_resort,"10 Snowshoe Dr, Snowshoe, WV 26209",Pocahontas,"WV's largest ski/snowboard resort; 60 trails, 1,500ft vertical; also mountain biking, golf, events in summer. Pocahontas Co.",Cass
+Timberline Mountain,ski_resort,"Canaan Valley Rd, Davis, WV 26260",Tucker,"Ski/snowboard resort in Tucker County; 37 trails, 1,000ft vertical; adjacent to Canaan Valley NWR.",Davis
+ACE Adventure Resort,boating_outfitter,"1 Ames Heights Rd, Oak Hill, WV 25901",Fayette,"Full-service whitewater resort; New River & Gauley River rafting, zip lines, camping, mountain biking. Near NRG NP.",White Sulphur Springs
+Adventures on the Gorge,boating_outfitter,"219 Chestnut Creek Rd, Lansing, WV 25862",Fayette,"New River & Gauley whitewater rafting, zip lines, lodging, camping. NRG NP area.",White Sulphur Springs
+River Expeditions,boating_outfitter,"HC 79 Box 96, Lansing, WV 25862",Fayette,New River & Gauley whitewater rafting outfitter. One of the oldest in WV.,White Sulphur Springs
+Appalachian Sport,boating_outfitter,"3 Seneca Trail, Marlinton, WV 24954",Pocahontas,"Kayak/canoe rentals, bike rentals, shuttles on the Greenbrier River. On the GRT.",Marlinton
+Greenbrier River Outfitters,boating_outfitter,"US 219, Caldwell, WV 24925",Greenbrier,Canoe/kayak/tube rentals and shuttles on the Greenbrier River. Southern GRT access.,White Sulphur Springs
+Blackwater Outdoor Adventures,boating_outfitter,"Davis, WV 26260",Tucker,Whitewater kayaking/canoeing on Blackwater River and North Fork Blackwater. Also guided hikes.,Davis
+The Greenbrier Resort,resort,"101 Main St W, White Sulphur Springs, WV 24986",Greenbrier,"Historic luxury resort; 3 golf courses, spa, casino, multiple restaurants. National Historic Landmark.",White Sulphur Springs
+Elk River Touring Center,resort,"Route 219, Slatyfork, WV 26291",Pocahontas,"Eco-lodge, XC skiing, mountain biking, fly fishing, guided tours. Near Snowshoe.",Cass
+Canaan Valley Resort,resort,"230 Main Lodge Rd, Davis, WV 26260",Tucker,"State-operated resort in Canaan Valley; skiing, golf, indoor pool, hiking. Adjacent to NWR.",Davis
+Seneca Shadows / Harman's North Fork Cottages,resort,"Harman, WV 26270",Randolph,"Upscale fly-fishing resort on the North Fork South Branch Potomac. Cabins, guided fishing.",Davis
+Seneca Shadows Campground,campground,"Seneca Rocks, WV 26884",Pendleton,"USFS campground at base of Seneca Rocks; tent/RV sites, near climbing and hiking. (USFS-managed but included for reference)",Davis
+Watoga State Park Campground,campground,"Star Rte 1 Box 252, Marlinton, WV 24954",Pocahontas,"Large state park campground; 88 sites, cabins, near Greenbrier River and ALT.",Marlinton
+KOA Campground Elkins,campground,"RT 1, Elkins, WV 26241",Randolph,"Private KOA campground near Elkins; tent, RV, cabin sites. Regional hub for ALT hikers.",Jenningston
+Horseshoe Recreation Area / Campground,campground,"Huttonsville, WV 26273",Randolph,Private campground near Huttonsville/US 250; convenient to central ALT corridor.,Durbin
+ACE Adventure Resort Camping,campground,"1 Ames Heights Rd, Oak Hill, WV 25901",Fayette,"Large private campground at ACE; tent, RV, glamping. Part of the ACE Adventure complex near NRG.",White Sulphur Springs
+Camp Horseshoe,summer_camp,"Huttonsville, WV 26273",Randolph,Private residential summer camp in Randolph County. Outdoor and adventure programming.,Jenningston
+Camp Washington-Carver,summer_camp,"Clifftop, WV 25831",Fayette,Historic African-American 4-H camp; now hosts Appalachian String Band Festival and youth programs. Fayette Co.,White Sulphur Springs
+Camp Pioneer (WV BSA),summer_camp,"Hacker Valley, WV 26222",Webster,"Boy Scouts of America camp in Webster County; hiking, shooting sports, merit badge programs.",Jenningston
+Grottoes of the Virginias / Seneca Caverns Area Camps,summer_camp,"Seneca Rocks, WV 26884",Pendleton,Several church and youth camps cluster in the Seneca Rocks/Smoke Hole area of Pendleton County.,Davis
+The Greenbrier — Old White TPC,golf_course,"101 Main St W, White Sulphur Springs, WV 24986",Greenbrier,PGA Tour venue (A Military Tribute at The Greenbrier); one of 3 courses at The Greenbrier resort.,White Sulphur Springs
+Snowshoe Mountain Golf,golf_course,"10 Snowshoe Dr, Snowshoe, WV 26209",Pocahontas,9-hole mountain golf course at Snowshoe Resort; open summer/fall.,Cass
+Elkins Country Club,golf_course,"Elkins, WV 26241",Randolph,9-hole private/semi-private golf course in Randolph County.,Jenningston
+Canaan Valley Resort Golf Course,golf_course,"230 Main Lodge Rd, Davis, WV 26260",Tucker,18-hole mountain golf course at Canaan Valley Resort State Park.,Davis

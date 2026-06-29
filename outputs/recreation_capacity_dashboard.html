@@ -132,6 +132,38 @@
   .quad-card .note  { font-size: .75rem; color: #555; margin-top: 3px;
                        line-height: 1.4; }
 
+  /* ── Tabs ── */
+  .tab-bar { display: flex; gap: 0; border-bottom: 2px solid #e8e8e5;
+              margin: -16px -16px 14px; padding: 0 16px; }
+  .tab-btn { background: none; border: none; cursor: pointer;
+             padding: 10px 14px 8px; font-size: .75rem; font-weight: 600;
+             text-transform: uppercase; letter-spacing: .05em;
+             color: #999; border-bottom: 2px solid transparent;
+             margin-bottom: -2px; transition: color .15s; }
+  .tab-btn:hover { color: #555; }
+  .tab-btn.active { color: #1a3a2a; border-bottom-color: #1a3a2a; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* ── Methodology panels ── */
+  .meth-section { margin-bottom: 14px; }
+  .meth-section:last-child { margin-bottom: 0; }
+  .meth-title { font-size: .7rem; font-weight: 700; text-transform: uppercase;
+                letter-spacing: .05em; color: #555; margin-bottom: 6px; }
+  .score-row { display: flex; align-items: baseline; gap: 8px;
+               padding: 5px 0; border-bottom: 1px solid #f0f0ee;
+               font-size: .78rem; line-height: 1.4; }
+  .score-row:last-child { border-bottom: none; }
+  .pts { flex-shrink: 0; font-weight: 700; min-width: 32px;
+         text-align: right; }
+  .pts.opp   { color: #2d8a4e; }
+  .pts.press { color: #c62828; }
+  .score-desc { color: #333; }
+  .score-sub  { font-size: .7rem; color: #888; display: block; margin-top: 1px; }
+  .meth-note { font-size: .72rem; color: #888; line-height: 1.5;
+               border-top: 1px solid #f0f0ee; margin-top: 10px;
+               padding-top: 8px; font-style: italic; }
+
   /* ── Table ── */
   .table-section { margin: 16px; }
   .filter-bar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
@@ -193,7 +225,7 @@
   <p>Where do recreation assets create opportunity, and where might tourism create pressure? &nbsp;·&nbsp; ALT-EXP Working Analysis (v3)</p>
   <div class="stat-strip">
     <div class="stat"><div class="n">27</div><div class="l">Corridor towns</div></div>
-    <div class="stat"><div class="n">23</div><div class="l">Public rec lands</div></div>
+    <div class="stat"><div class="n">26</div><div class="l">Public rec lands</div></div>
     <div class="stat"><div class="n">4</div><div class="l">Private facilities</div></div>
     <div class="stat"><div class="n">4</div><div class="l">Quadrants</div></div>
     <div class="stat"><div class="n">288 mi</div><div class="l">ALT length</div></div>
@@ -249,32 +281,132 @@
     </div>
   </section>
 
-  <!-- Quadrant findings -->
+  <!-- Tabbed right panel -->
   <section class="panel">
-    <h2>Quadrant Summary</h2>
-
-    <div class="quad-card green">
-      <div class="label">Positioned to Capture</div>
-      <div class="towns">Marlinton · Davis · Parsons · Durbin · Bruceton Mills · Albright</div>
-      <div class="note">Strongest existing commercial and infrastructure base. Front-of-house towns for the corridor. Marlinton is the standout: 5 mapped assets, 2 outfitters, municipal water.</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab(this,'tab-summary')">Summary</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-opp')">Opportunity</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-press')">Pressure</button>
     </div>
 
-    <div class="quad-card orange">
-      <div class="label">Invest Before Scaling</div>
-      <div class="towns">Cass · White Sulphur Springs · Hambleton</div>
-      <div class="note">Real recreation draws but thin or fragile infrastructure. Cass has no municipal water. White Sulphur Springs sits on karst. Infrastructure investment should precede tourism scaling.</div>
+    <!-- Summary tab -->
+    <div id="tab-summary" class="tab-pane active">
+      <div class="quad-card green">
+        <div class="label">Positioned to Capture</div>
+        <div class="towns">Marlinton · Davis · Parsons · Durbin · Bruceton Mills · Albright</div>
+        <div class="note">Strongest existing commercial and infrastructure base. Front-of-house towns for the corridor. Marlinton is the standout: 5 mapped assets, 2 outfitters, municipal water.</div>
+      </div>
+      <div class="quad-card orange">
+        <div class="label">Invest Before Scaling</div>
+        <div class="towns">Cass · Arbovale · White Sulphur Springs · Hambleton</div>
+        <div class="note">Real recreation draws but thin or fragile infrastructure. Cass and Arbovale have no municipal water system. White Sulphur Springs sits on karst. Infrastructure investment should precede tourism scaling.</div>
+      </div>
+      <div class="quad-card red">
+        <div class="label">Infrastructure First</div>
+        <div class="towns">Hillsboro · Aurora · Bartow · Huntersville · Harman</div>
+        <div class="note">Hillsboro and Aurora score 6 on pressure — both on karst, no municipal CWS, yet Droop Mountain and Cathedral SP pull visitor traffic. Foundational capacity investment is the priority.</div>
+      </div>
+      <div class="quad-card gray">
+        <div class="label">Stable Baseline</div>
+        <div class="towns">Kingwood · Terra Alta · Rowlesburg · Thomas · Masontown · Green Bank · others</div>
+        <div class="note">Stable but largely outside trail-driven tourism scope. Municipal water, moderate business base, off karst. Lower trail exposure overall.</div>
+      </div>
     </div>
 
-    <div class="quad-card red">
-      <div class="label">Infrastructure First</div>
-      <div class="towns">Hillsboro · Aurora · Arbovale · Bartow · Huntersville · Harman</div>
-      <div class="note">Hillsboro and Aurora score 6 on pressure — both on karst, no municipal CWS, yet Droop Mountain and Cathedral SP pull visitor traffic. Foundational capacity investment is the priority.</div>
+    <!-- Opportunity tab -->
+    <div id="tab-opp" class="tab-pane">
+      <div class="meth-section">
+        <div class="meth-title">What it measures</div>
+        <p style="font-size:.78rem;color:#444;line-height:1.5;margin-bottom:10px">
+          Readiness to capture visitor spending — a town's combination of nearby
+          recreation draws, existing commercial infrastructure, and outfitter presence.
+          Higher = more to build on.
+        </p>
+      </div>
+      <div class="meth-section">
+        <div class="meth-title">Score components</div>
+        <div class="score-row">
+          <span class="pts opp">+2</span>
+          <span class="score-desc">per mapped recreation asset nearby
+            <span class="score-sub">State parks/forests, NF wilderness areas, NWR, NRA, private resort facilities within ~10 mi of corridor</span>
+          </span>
+        </div>
+        <div class="score-row">
+          <span class="pts opp">+2</span>
+          <span class="score-desc">any in-corridor outfitter present
+            <span class="score-sub">Guide services, outfitters, or commercial recreation operators with a corridor address</span>
+          </span>
+        </div>
+        <div class="score-row">
+          <span class="pts opp">+0–3</span>
+          <span class="score-desc">existing business density tier
+            <span class="score-sub">0 = &lt;10/sq mi · 1 = 10–30/sq mi · 2 = 30–60/sq mi · 3 = &gt;60/sq mi (proxy for visitor-economy absorption capacity)</span>
+          </span>
+        </div>
+      </div>
+      <div class="meth-section">
+        <div class="meth-title">Threshold</div>
+        <div class="score-row" style="border:none;padding:0">
+          <span class="pts opp">≥ 5</span>
+          <span class="score-desc">classified as high opportunity (top half of quadrant grid)</span>
+        </div>
+      </div>
+      <div class="meth-note">
+        Recreation asset proximity is hand-coded from project analysis, not a
+        computed GIS distance join. Asset list covers major mapped public lands
+        and commercial facilities along the corridor.
+      </div>
     </div>
 
-    <div class="quad-card gray">
-      <div class="label">Stable Baseline</div>
-      <div class="towns">Kingwood · Terra Alta · Rowlesburg · Thomas · Masontown · Green Bank · others</div>
-      <div class="note">Stable but largely outside trail-driven tourism scope. Municipal water, moderate business base, off karst. Lower trail exposure overall.</div>
+    <!-- Pressure tab -->
+    <div id="tab-press" class="tab-pane">
+      <div class="meth-section">
+        <div class="meth-title">What it measures</div>
+        <p style="font-size:.78rem;color:#444;line-height:1.5;margin-bottom:10px">
+          Vulnerability to tourism-driven stress — fragmented water infrastructure,
+          thin commercial base, and geological risk factors that compound under
+          growth. Higher = less capacity to absorb increased visitation.
+        </p>
+      </div>
+      <div class="meth-section">
+        <div class="meth-title">Score components</div>
+        <div class="score-row">
+          <span class="pts press">+2</span>
+          <span class="score-desc">3 or more water systems serving &lt;100 people
+            <span class="score-sub">Fragmented private/transient systems (TNCWS) indicate no central capacity backbone; dozens of small separate systems rather than one monitored municipal system</span>
+          </span>
+        </div>
+        <div class="score-row">
+          <span class="pts press">+2</span>
+          <span class="score-desc">no municipal community water system (CWS)
+            <span class="score-sub">No locally-owned CWS at all — town relies entirely on private wells and small private systems; growth demand has no central system to route to</span>
+          </span>
+        </div>
+        <div class="score-row">
+          <span class="pts press">+1</span>
+          <span class="score-desc">fewer than 10 existing businesses
+            <span class="score-sub">Thin commercial base limits capacity to absorb visitor volume or provide basic visitor services</span>
+          </span>
+        </div>
+        <div class="score-row">
+          <span class="pts press">+2</span>
+          <span class="score-desc">town sits on mapped karst geology
+            <span class="score-sub">WVGES 1968 karst-formations layer (via DOE EDX): limestone/dolomite formations with sinkholes and subterranean drainage where contamination travels fast and is hard to trace. Compounds any water-capacity concern with environmental risk.</span>
+          </span>
+        </div>
+      </div>
+      <div class="meth-section">
+        <div class="meth-title">Threshold</div>
+        <div class="score-row" style="border:none;padding:0">
+          <span class="pts press">≥ 3</span>
+          <span class="score-desc">classified as high pressure (bottom half of quadrant grid)</span>
+        </div>
+      </div>
+      <div class="meth-note">
+        Karst status is a polygon-intersection test against town boundaries using
+        a 1968-derived generalized map — treat as "flagged for further look," not a
+        definitive parcel-level finding. Water system data from EPA SDWIS.
+      </div>
     </div>
   </section>
 </div>
@@ -323,6 +455,14 @@
 </footer>
 
 <script>
+// ── Tab switcher ──────────────────────────────────────────────────────────
+function switchTab(btn, paneId) {
+  btn.closest("section").querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.closest("section").querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById(paneId).classList.add("active");
+}
+
 const OPP_THRESH  = 5;
 const PRESS_THRESH = 3;
 
@@ -338,35 +478,4 @@ const POP = {
   "Frank":15, "St. George":401
 };
 
-const towns = [{"town": "Marlinton", "opportunity_score": 15, "pressure_score": 2, "recreation_assets_nearby": 5, "recreation_asset_names": "Watoga State Park; Beartown State Park; Droop Mountain Battlefield State Park; Greenbrier River Trail (direct connection); Seneca State Forest", "outfitters_in_town": 2, "total_business_count": 167, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.05, "pws_small_systems_under_100pop": 37, "municipal_pop_per_connection": 2.27}, {"town": "Davis", "opportunity_score": 11, "pressure_score": 2, "recreation_assets_nearby": 4, "recreation_asset_names": "Blackwater Falls State Park; Canaan Valley Resort State Park; Canaan Valley National Wildlife Refuge; Dolly Sods Wilderness", "outfitters_in_town": 2, "total_business_count": 34, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.7, "pws_small_systems_under_100pop": 11, "municipal_pop_per_connection": 2.07}, {"town": "Parsons", "opportunity_score": 9, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Otter Creek Wilderness; Laurel Fork North Wilderness; Spruce Knob-Seneca Rocks NRA", "outfitters_in_town": 0, "total_business_count": 101, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.59, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 1.83}, {"town": "Durbin", "opportunity_score": 8, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area); Laurel Fork North Wilderness; Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 21, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.79, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.01}, {"town": "White Sulphur Springs", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 2, "recreation_asset_names": "The Greenbrier Resort (private, self-supplied); Greenbrier State Forest", "outfitters_in_town": 0, "total_business_count": 184, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.06}, {"town": "Cass", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 3, "recreation_asset_names": "Cass Scenic Railroad State Park; Greenbrier River Trail (terminus); Snowshoe Mountain Resort (private)", "outfitters_in_town": 0, "total_business_count": 10, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.45, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "Bruceton Mills", "opportunity_score": 7, "pressure_score": 2, "recreation_assets_nearby": 2, "recreation_asset_names": "Coopers Rock State Forest; Chestnut Ridge Regional Park (county, ~6mi)", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 5.7, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 4.02}, {"town": "Albright", "opportunity_score": 5, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.73, "pws_small_systems_under_100pop": 3, "municipal_pop_per_connection": 2.17}, {"town": "Hambleton", "opportunity_score": 4, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Otter Creek Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.38, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Hillsboro", "opportunity_score": 3, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Droop Mountain Battlefield State Park", "outfitters_in_town": 0, "total_business_count": 14, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": null}, {"town": "Arbovale", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Cranberry Wilderness", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.25, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "Bartow", "opportunity_score": 3, "pressure_score": 5, "recreation_assets_nearby": 1, "recreation_asset_names": "Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.76, "pws_small_systems_under_100pop": 7, "municipal_pop_per_connection": null}, {"town": "Harman", "opportunity_score": 3, "pressure_score": 3, "recreation_assets_nearby": 1, "recreation_asset_names": "Dolly Sods Wilderness", "outfitters_in_town": 0, "total_business_count": 9, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": 2.29}, {"town": "Kingwood", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 199, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.65, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": 2.36}, {"town": "Terra Alta", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 75, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.55, "pws_small_systems_under_100pop": 5, "municipal_pop_per_connection": 2.42}, {"town": "Rowlesburg", "opportunity_score": 3, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Cheat Canyon Wildlife Management Area", "outfitters_in_town": 0, "total_business_count": 28, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.32, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.37}, {"town": "Thomas", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 1, "recreation_asset_names": "Canaan Valley National Wildlife Refuge", "outfitters_in_town": 0, "total_business_count": 60, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 2.31, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.01}, {"town": "Masontown", "opportunity_score": 3, "pressure_score": 0, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 27, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.87, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.38}, {"town": "Aurora", "opportunity_score": 2, "pressure_score": 6, "recreation_assets_nearby": 1, "recreation_asset_names": "Cathedral State Park", "outfitters_in_town": 0, "total_business_count": 17, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 8, "municipal_pop_per_connection": null}, {"town": "Green Bank", "opportunity_score": 2, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Green Bank Observatory", "outfitters_in_town": 0, "total_business_count": 24, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.93, "pws_small_systems_under_100pop": 1, "municipal_pop_per_connection": null}, {"town": "Cheat Lake", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 243, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Brookhaven", "opportunity_score": 1, "pressure_score": 4, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 121, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Hendricks", "opportunity_score": 1, "pressure_score": 1, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 5, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.12, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": 2.28}, {"town": "Huntersville", "opportunity_score": 0, "pressure_score": 5, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 4, "has_municipal_cws": false, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Brandonville", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 5.71, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "Frank", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 1.61, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}, {"town": "St. George", "opportunity_score": 0, "pressure_score": 3, "recreation_assets_nearby": 0, "recreation_asset_names": "none mapped", "outfitters_in_town": 0, "total_business_count": 2, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.36, "pws_small_systems_under_100pop": 0, "municipal_pop_per_connection": null}];
-
-function getQuad(d) {
-  const hi = d.opportunity_score >= OPP_THRESH;
-  const hp = d.pressure_score    >= PRESS_THRESH;
-  // High opp + Low press  = green  (top-left)
-  // Low opp  + Low press  = gray   (top-right)
-  // High opp + High press = orange (bottom-left)
-  // Low opp  + High press = red    (bottom-right)
-  if ( hi && !hp) return "green";
-  if (!hi && !hp) return "gray";
-  if ( hi &&  hp) return "orange";
-  return "red";
-}
-
-// ── Quadrant grid chips ────────────────────────────────────────────────────
-const sorted = [...towns].sort((a,b) =>
-  b.opportunity_score - a.opportunity_score || a.pressure_score - b.pressure_score
-);
-
-sorted.forEach(d => {
-  const q   = getQuad(d);
-  const pop = POP[d.town] ? POP[d.town].toLocaleString() : "—";
-  const container = document.getElementById(`q-${q}`);
-
-  const flags = [
-    d.on_karst           ? "⚠ On karst"     : null,
-    !d.has_municipal_cws ? "✗ No muni CWS"  : null,
-  ].filter(Boolean).join(" · ");
-
-  const assetSnip = d.recreation_assets_nearby > 0
-    ? d.recreation_asset_names.replace(/; /g, ", ").sub
+const towns = [{"town": "Marlinton", "opportunity_score": 19, "pressure_score": 2, "recreation_assets_nearby": 7, "recreation_asset_names": "Watoga State Park; Beartown State Park; Droop Mountain Battlefield State Park; Greenbrier River Trail (direct connection); Seneca State Forest; Falls of Hills Creek Scenic Area (USFS, ~8mi); Highland Scenic Highway (WV Rt 150, ~12mi)", "outfitters_in_town": 2, "total_business_count": 167, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.05, "pws_small_systems_under_100pop": 37, "municipal_pop_per_connection": 2.27}, {"town": "Davis", "opportunity_score": 11, "pressure_score": 2, "recreation_assets_nearby": 4, "recreation_asset_names": "Blackwater Falls State Park; Canaan Valley Resort State Park; Canaan Valley National Wildlife Refuge; Dolly Sods Wilderness", "outfitters_in_town": 2, "total_business_count": 34, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.7, "pws_small_systems_under_100pop": 11, "municipal_pop_per_connection": 2.07}, {"town": "Cass", "opportunity_score": 9, "pressure_score": 4, "recreation_assets_nearby": 4, "recreation_asset_names": "Cass Scenic Railroad State Park; Greenbrier River Trail (terminus); Snowshoe Mountain Resort (private, ~15mi); Elk River Touring Center (private, ~10mi)", "outfitters_in_town": 0, "total_business_count": 10, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 0.45, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "Parsons", "opportunity_score": 9, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Otter Creek Wilderness; Laurel Fork North Wilderness; Spruce Knob-Seneca Rocks NRA", "outfitters_in_town": 0, "total_business_count": 101, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 1.59, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 1.83}, {"town": "Durbin", "opportunity_score": 8, "pressure_score": 2, "recreation_assets_nearby": 3, "recreation_asset_names": "Monongahela NF (Gaudineer Scenic Area / Cheat Mountain area); Laurel Fork North Wilderness; Laurel Fork South Wilderness", "outfitters_in_town": 0, "total_business_count": 21, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 0.79, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.01}, {"town": "Arbovale", "opportunity_score": 7, "pressure_score": 5, "recreation_assets_nearby": 3, "recreation_asset_names": "Cranberry Wilderness; Cranberry Glades Botanical Area; Highland Scenic Highway (WV Rt 150)", "outfitters_in_town": 0, "total_business_count": 8, "has_municipal_cws": false, "on_karst": false, "dist_to_karst_mi": 2.25, "pws_small_systems_under_100pop": 4, "municipal_pop_per_connection": null}, {"town": "White Sulphur Springs", "opportunity_score": 7, "pressure_score": 4, "recreation_assets_nearby": 2, "recreation_asset_names": "The Greenbrier Resort (private, self-supplied); Greenbrier State Forest", "outfitters_in_town": 0, "total_business_count": 184, "has_municipal_cws": true, "on_karst": true, "dist_to_karst_mi": 0.0, "pws_small_systems_under_100pop": 6, "municipal_pop_per_connection": 2.06}, {"town": "Bruceton Mills", "opportunity_score": 7, "pressure_score": 2, "recreation_assets_nearby": 2, "recreation_asset_names": "Coopers Rock State Forest; Chestnut Ridge Regional Park (county, ~6mi)", "outfitters_in_town": 0, "total_business_count": 20, "has_municipal_cws": true, "on_karst": false, "dist_to_karst_mi": 5.7, "pws_small_systems_under_100pop": 10, "municipal_pop_per_connection": 4.02}, {"town": "Albright", "opportunity_score": 5, "pressure_score": 2, "recreation_assets_nearby": 1, "recreation_asset_names": "Ch

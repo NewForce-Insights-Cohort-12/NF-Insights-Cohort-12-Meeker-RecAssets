@@ -1,0 +1,27 @@
+name,facility_type,agency,acres,notes,corridor_town
+Blackwater Falls State Park,state_park,WV DNR,2279.9,"Section 1 southern terminus area; lodge, cabins, trails",Davis
+Canaan Valley Resort State Park,state_park,WV DNR,5807.0,Near Canaan Valley trailhead waypoint,Davis
+Cathedral State Park,state_park,WV DNR,127.1,"Old-growth hemlock forest near Aurora, day-use only",Terra Alta
+Kumbrabow State Forest,state_forest,WV Division of Forestry,9158.2,Highest-elevation state forest in WV; Section 2 area,Jenningston
+Cass Scenic Railroad State Park,state_park,WV DNR,383.4,"Section 2/3 boundary; historic logging railroad, cabins",Cass
+Seneca State Forest,state_forest,WV Division of Forestry,12845.0,"WV's oldest state forest; cabins, camping, near Section 3",Cass
+Watoga State Park,state_park,WV DNR,10212.7,"WV's largest state park; Section 3 area, campground waypoint",Marlinton
+Calvin Price State Forest,state_forest,WV Division of Forestry,10125.4,Largely undeveloped; eastern Pocahontas/Greenbrier counties,Marlinton
+Droop Mountain Battlefield State Park,state_park,WV DNR,292.6,"Civil War site near Hillsboro, scenic overlook tower",Marlinton
+Beartown State Park,state_park,WV DNR,107.4,"Boardwalk through sandstone formations, day-use only",Marlinton
+Greenbrier State Forest,state_forest,WV Division of Forestry,4841.9,"Near White Sulphur Springs, Section 4 area",White Sulphur Springs
+Gaudineer Scenic Area (Mon. NF),national_forest_scenic_area,USFS - Monongahela NF,145.4,Old-growth red spruce; near Gaudineer N/S trailhead waypoints,Durbin
+Coopers Rock State Forest,state_forest,WV Division of Forestry,13057.2,"Section 1 gateway; 12,747 acres; rock overlooks, hiking, camping, climbing near I-68",Albright
+Cheat Canyon Wildlife Management Area,wildlife_management_area,WV DNR,3806.2,"3,836 acres on Cheat River canyon near Albright; whitewater access, hunting, hiking; purchased 2014",Albright
+Canaan Valley National Wildlife Refuge,national_wildlife_refuge,US Fish & Wildlife Service,16995.8,"16,613 acres; largest high-elevation wetland complex in eastern US; birding, wildlife observation, hunting; Tucker County",Davis
+Dolly Sods Wilderness,national_forest_wilderness,USFS - Monongahela NF,17776.7,"17,776 acres; high-altitude heath barrens, WWII-era bombing range; Section 1 area; 0.7mi from corridor",Davis
+Otter Creek Wilderness,national_forest_wilderness,USFS - Monongahela NF,20705.5,"20,698 acres; Section 1/2 corridor; old-growth hemlock, remote backcountry; Tucker/Randolph counties",Thomas
+Laurel Fork North Wilderness,national_forest_wilderness,USFS - Monongahela NF,6048.1,"6,055 acres; Randolph County; 9.5mi of trails along Laurel Fork river; Section 2 area",Durbin
+Laurel Fork South Wilderness,national_forest_wilderness,USFS - Monongahela NF,5839.7,"5,784 acres; Randolph County; 9mi of trails; separated from North by County Route 40; Section 2 area",Durbin
+Spruce Knob-Seneca Rocks NRA,national_recreation_area,USFS - Monongahela NF,99824.0,"100,000 acres; includes WV's highest point (4,863ft) and premier rock climbing at Seneca Rocks; Pendleton County; 7mi from corridor",Davis
+Cranberry Wilderness,national_forest_wilderness,USFS - Monongahela NF,47742.0,"47,815 acres; largest eastern US USFS wilderness; Pocahontas/Webster counties; black bear sanctuary; 8.4mi from corridor",Marlinton
+Falls of Hills Creek Scenic Area,state_park,WV DNR,6924.8,Holly River State Park — added from PAD-US,Marlinton
+Cranberry Glades Botanical Area,state_park,WV DNR,828.1,Holly River State Park — added from PAD-US,Marlinton
+Holly River State Park,state_park,WV DNR,8128.2,Holly River State Park — added from PAD-US,Jenningston
+New River Gorge National Park and Preserve,national_park,NPS,52889.8,"New River Gorge National Park and Preserve — designated 2020, 52,890 ac",White Sulphur Springs
+Green Bank Observatory,federal_research_facility,"NSF / Associated Universities, Inc.",2666.6,"Green Bank Observatory — NSF-funded radio astronomy facility, site of the GBT",Green Bank
