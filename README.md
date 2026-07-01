@@ -59,53 +59,34 @@ Earlier deliverable built via the Jupyter notebook. Shows public land polygons, 
 
 ---
 
-## Data Exports (for group project integration)
+## Visitor Data
 
-`data/exports/` contains four CSV + GeoJSON pairs. All share a `corridor_town` field keyed to the 11 towns above.
+Annual visitor counts were researched for all 51 facilities (26 public lands, 25 private rec) and added as five new columns to both export CSVs and GeoJSON files: `annual_visitors`, `visitor_year`, `visitor_trend`, `visitor_source`, `visitor_data_notes`. The dashboard and town explorer sidebar tables now display this data where available.
 
-| File pair | Features | Key fields |
-|-----------|----------|------------|
-| `public_lands.*` | 26 polygons | name, facility_type, agency, acres, notes, corridor_town |
-| `amenities.*` | 14 points | name, amenity_type, associated_facility, notes, corridor_town |
-| `private_rec.*` | 25 points | name, facility_type, address, county, notes, corridor_town |
-| `easements.*` | 1,096 polygons | unit_name, holder, holder_type, manager, acres, duration, date_est, pub_access, gap_status, corridor_town |
+### Facilities with confirmed visitor data (7 of 51)
 
----
+| Facility | Annual Visitors | Year | Source |
+|----------|----------------|------|--------|
+| New River Gorge NP & Preserve | 1,811,937 (record) | 2024 | NPS IRMA Stats (irma.nps.gov) |
+| Snowshoe Mountain Resort | ~480,000 skier visits | 2022–23 est. | skimag.com; snowshoemtn.com |
+| Coopers Rock State Forest | ~300,000 | 2023 est. | coopersrock.org; visitmountaineercountry.com |
+| Dolly Sods Wilderness | ~60,000 (range 45K–76K) | 2022–23 | wvgazettemail.com; wvhighlands.org |
+| Green Bank Observatory | ~50,000 | 2023 est. | gogreenbankobservatory.org (official fact sheets) |
+| Spruce Knob-Seneca Rocks NRA | ~35,000 (Seneca Rocks area) | 2023 est. | USFS NVUM; wvtourism.com |
+| Canaan Valley NWR | ~10,000 (visitor center only) | 2023 est. | USFWS (fws.gov/refuge/canaan-valley) |
 
-## File Structure
+**NRG context:** New River Gorge NP grew 1,595,923 (2022) → 1,709,623 (2023) → 1,811,937 (2024), ~6%/yr. Gauley River NRA (adjacent, not in this dataset) saw 187,223 visitors in 2023.
 
-```
-recreation_capacity/
-├── README.md
-├── recreation_capacity_memo.md        # Earlier analytical memo (opportunity/pressure scorecard)
-├── portfolio.html
-│
-├── data/
-│   ├── focus_town_list.csv            # 11 official corridor towns with Census GEOIDs
-│   ├── focus_towns.geojson            # Town boundary polygons (10 Census + 1 point proxy)
-│   ├── town_scorecard.csv             # Earlier scorecard artifact (27 towns, pre-refocus)
-│   ├── build_town_scorecard.py        # Builds the earlier scorecard
-│   ├── build_map.py                   # Standalone script to regenerate recreation_capacity_map.html
-│   │
-│   ├── exports/                       # ← GROUP PROJECT INTEGRATION FILES
-│   │   ├── public_lands.csv / .geojson
-│   │   ├── amenities.csv / .geojson
-│   │   ├── private_rec.csv / .geojson
-│   │   └── easements.csv / .geojson
-│   │
-│   ├── recreation/
-│   │   │
-│   │   │  — Working / tagged files (all have nearest_town property) —
-│   │   ├── public_lands_tagged.geojson          # 26 PAD-US polygons, with computed acres
-│   │   ├── public_points_tagged.geojson         # Same 26 lands as point centroids
-│   │   ├── amenities_tagged.geojson             # 14 amenity points (overlooks, campgrounds, etc.)
-│   │   ├── private_rec_tagged.geojson           # 25 private facilities
-│   │   ├── easements_tagged.geojson             # 1,096 PAD-US easement polygons
-│   │   ├── highland_tagged.geojson              # Highland Scenic Highway (Rt. 150) LineString
-│   │   │
-│   │   │  — Source / pre-tag files —
-│   │   ├── public_recreation_lands_poly.geojson # PAD-US polygons before town-join
-│   │   ├── public_recreation_lands.geojson      # Earlier point-based public lands layer
-│   │   ├── public_recreation_amenities.geojson  # Earlier amenities (pre-coordinate correction)
-│   │   ├── conservation_easements.geojson       # PAD-US easements before town-join
-│   │   ├── private_rec_facilities_expanded.geojson  # Private rec before town-join
+**Monongahela NF context:** The Mon NF as a whole receives ~3 million visits/year (USFS NVUM FY2019), but individual wilderness unit counts are not published. Dolly Sods trailhead registers are the one exception with tracked counts.
+
+### Why 44 facilities have no visitor data
+
+- **WV DNR state parks/forests** (~14 facilities): WV DNR does not publish facility-level annual visitor counts. The agency reports only a system-wide aggregate (~7 million/year across all state parks). Counts for individual parks such as Blackwater Falls, Watoga, and Cass Scenic Railroad are maintained internally but not released publicly.
+- **Private facilities** (~24 facilities): Private companies (outfitters, resorts, campgrounds, summer camps, golf courses) are not required to report visitor figures and rarely publish them.
+- **USFS wilderness areas** (Otter Creek, Laurel Fork N/S, Cranberry): No formal visitor counting infrastructure. Dolly Sods is the exception because WV Highlands Conservancy has run a trailhead register program there.
+
+### Recommended next steps to fill gaps
+
+1. **WV DNR public records request** — submit a FOIA/public records request to WV Division of Natural Resources for annual park-level visitation counts. Contact: wvdnr.gov.
+2. **New River Gorge CVB** — the Convention & Visitors Bureau (newrivergorgecvb.com) may have aggregated commercial outfitter permit data for the New/Gauley rafting industry.
+3. **USFS Monongahela NF NVUM** — the next National Visitor Use Monitoring survey cycle (every 5 ye
